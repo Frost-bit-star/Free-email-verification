@@ -1,0 +1,20 @@
+name: Keep Server Awake
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"  # ⏰ Every 5 minutes
+
+jobs:
+  ping-server:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛰️ Ping health endpoint and validate response
+        run: |
+          echo "Pinging health check..."
+          RESPONSE=$(curl -s https://verify-email-api-ma40.onrender.com/health)
+          echo "Response: $RESPONSE"
+          echo "$RESPONSE" | grep -q '"status":"ok"' || {
+            echo "❌ Health check failed: Service not fully healthy."
+            exit 1
+          }
