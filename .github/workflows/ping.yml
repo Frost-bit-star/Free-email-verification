@@ -2,7 +2,7 @@ name: Keep Server Awake
 
 on:
   schedule:
-    - cron: "*/5 * * * *"  # ⏰ Every 5 minutes
+    - cron: "*/2 * * * *"  # ⏰ Every 5 minutes
 
 jobs:
   ping-server:
