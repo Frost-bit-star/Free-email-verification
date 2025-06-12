@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Email Verification Demo</title>
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background: linear-gradient(135deg, #e0f7fa, #ffffff);
+      color: #333;
+      overflow-x: hidden;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 2.5rem;
+    }
+    .glass {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      perspective: 1000px;
+    }
+    .glass:hover {
+      transform: rotateX(3deg) rotateY(3deg) scale(1.01);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    input, button {
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+    button {
+      background: #2979ff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #1c5fd0;
+    }
+    pre {
+      background: #eceff1;
+      padding: 1rem;
+      border-radius: 10px;
+      white-space: pre-wrap;
+    }
+    .status-ok {
+      color: green;
+      font-weight: bold;
+    }
+    .status-error {
+      color: red;
+      font-weight: bold;
+    }
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      background: #fff;
+      color: #2979ff;
+      text-decoration: none;
+      font-weight: bold;
+      border: 2px solid #2979ff;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .back-btn:hover {
+      background: #2979ff;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+<a href="index.html" class="back-btn">← Back to Home</a>
+
+<h1 data-aos="fade-down">📧 Email Verification API Demo</h1>
+
+<section class="glass" data-aos="fade-up">
+  <h2>Request Code</h2>
+  <form id="requestForm">
+    <input type="text" name="company" placeholder="Company" required>
+    <input type="text" name="username" placeholder="Username" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <button type="submit">Send Verification Code</button>
+  </form>
+  <pre id="requestResult"></pre>
+</section>
+
+<section class="glass" data-aos="fade-up" data-aos-delay="200">
+  <h2>Verify Code</h2>
+  <form id="verifyForm">
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="text" name="code" placeholder="Code (e.g. 1A2B3C)" required>
+    <button type="submit">Verify</button>
+  </form>
+  <pre id="verifyResult"></pre>
+</section>
+
+<section class="glass" data-aos="fade-up" data-aos-delay="400">
+  <h2>Server Health</h2>
+  <div id="healthStatus">Checking...</div>
+</section>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init();
+
+  const API_BASE = 'https://verify-email-api-ma40.onrender.com';
+
+  document.getElementById('requestForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const payload = {
+      company: form.company.value,
+      username: form.username.value,
+      email: form.email.value
+    };
+
+    const res = await fetch(`${API_BASE}/request-code`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    document.getElementById('requestResult').textContent = JSON.stringify(data, null, 2);
+  });
+
+  document.getElementById('verifyForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const payload = {
+      email: form.email.value,
+      code: form.code.value
+    };
+
+    const res = await fetch(`${API_BASE}/verify-code`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    document.getElementById('verifyResult').textContent = JSON.stringify(data, null, 2);
+  });
+
+  async function checkHealth() {
+    try {
+      const res = await fetch(`${API_BASE}/health`);
+      if (res.ok) {
+        document.getElementById('healthStatus').innerHTML = '<span class="status-ok">✅ API is Healthy</span>';
+      } else {
+        document.getElementById('healthStatus').innerHTML = '<span class="status-error">❌ API Health Check Failed</span>';
+      }
+    } catch (err) {
+      document.getElementById('healthStatus').innerHTML = '<span class="status-error">❌ Could not connect to API</span>';
+    }
+  }
+
+  checkHealth();
+</script>
+
+</body>
+</html>
