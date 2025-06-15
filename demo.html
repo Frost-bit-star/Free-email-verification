@@ -3,12 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Email Verification</title>
+  <title>Email Verification & Custom Sender</title>
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
@@ -18,8 +16,8 @@
     }
     h1 {
       text-align: center;
+      margin-bottom: 1.5rem;
       font-size: 2.5rem;
-      margin-bottom: 2rem;
     }
     .glass {
       max-width: 600px;
@@ -27,14 +25,15 @@
       padding: 2rem;
       background: rgba(255, 255, 255, 0.15);
       border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
       backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.18);
-      transition: 0.3s ease;
+      transition: transform 0.3s ease;
     }
     .glass:hover {
       transform: scale(1.01);
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     }
     form, .form-group {
       display: flex;
@@ -63,18 +62,13 @@
       background: #1c5fd0;
     }
     pre {
-      background: #f5f5f5;
+      background: #eceff1;
       padding: 1rem;
       border-radius: 10px;
+      white-space: pre-wrap;
     }
-    .status-ok {
-      color: green;
-      font-weight: bold;
-    }
-    .status-error {
-      color: red;
-      font-weight: bold;
-    }
+    .status-ok { color: green; font-weight: bold; }
+    .status-error { color: red; font-weight: bold; }
     .back-btn {
       display: inline-block;
       margin-bottom: 1.5rem;
@@ -85,7 +79,7 @@
       text-decoration: none;
       font-weight: bold;
       border: 2px solid #2979ff;
-      transition: 0.3s ease;
+      transition: background 0.3s ease, color 0.3s ease;
     }
     .back-btn:hover {
       background: #2979ff;
@@ -95,16 +89,17 @@
 </head>
 <body>
 
-<a href="index.html" class="back-btn">← Back</a>
-<h1 data-aos="fade-down">📧 Email Verification Demo</h1>
+<a href="index.html" class="back-btn">← Back to Home</a>
+
+<h1 data-aos="fade-down">📧 Email API Playground</h1>
 
 <section class="glass" data-aos="fade-up">
-  <h2>Request Code</h2>
+  <h2>Request Verification Code</h2>
   <form id="requestForm">
     <input type="text" name="company" placeholder="Company" required>
     <input type="text" name="username" placeholder="Username" required>
     <input type="email" name="email" placeholder="Email" required>
-    <button type="submit">Send Verification Code</button>
+    <button type="submit">Send Code</button>
   </form>
   <pre id="requestResult"></pre>
 </section>
@@ -123,10 +118,14 @@
   <h2>Send Custom Email</h2>
   <div class="form-group">
     <input type="email" id="emailTo" placeholder="Recipient Email" required>
-    <input type="text" id="emailSubject" placeholder="Subject">
+    <input type="text" id="emailSubject" placeholder="Email Subject" />
     <input type="text" id="companyName" placeholder="Company Name" required>
-    <textarea id="emailBody" placeholder="Message Body" rows="5"></textarea>
-    <button onclick="sendCustomEmail()">Send Email</button>
+    <textarea id="emailBody" placeholder="Main message (before link)" rows="4"></textarea>
+    
+    <input type="text" id="linkText" placeholder="CTA Link Text (e.g. Track Order)" />
+    <input type="url" id="linkUrl" placeholder="URL to link to (e.g. https://...)" />
+
+    <button onclick="sendCustomEmail()">Send Custom Email</button>
     <p id="emailStatus" class="text-center text-sm mt-2"></p>
   </div>
 </section>
@@ -139,7 +138,6 @@
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>
   AOS.init();
-
   const API_BASE = 'https://verify-email-api-ma40.onrender.com';
 
   document.getElementById('requestForm').addEventListener('submit', async (e) => {
@@ -150,13 +148,11 @@
       username: form.username.value,
       email: form.email.value
     };
-
     const res = await fetch(`${API_BASE}/request-code`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-
     const data = await res.json();
     document.getElementById('requestResult').textContent = JSON.stringify(data, null, 2);
   });
@@ -168,13 +164,11 @@
       email: form.email.value,
       code: form.code.value
     };
-
     const res = await fetch(`${API_BASE}/verify-code`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-
     const data = await res.json();
     document.getElementById('verifyResult').textContent = JSON.stringify(data, null, 2);
   });
@@ -182,13 +176,11 @@
   async function checkHealth() {
     try {
       const res = await fetch(`${API_BASE}/health`);
-      if (res.ok) {
-        document.getElementById('healthStatus').innerHTML = '<span class="status-ok">✅ online</span>';
-      } else {
-        document.getElementById('healthStatus').innerHTML = '<span class="status-error">❌ offline</span>';
-      }
+      document.getElementById('healthStatus').innerHTML = res.ok
+        ? '<span class="status-ok">✅ Server is Online</span>'
+        : '<span class="status-error">❌ Server Health Check Failed</span>';
     } catch (err) {
-      document.getElementById('healthStatus').innerHTML = '<span class="status-error">❌ offline</span>';
+      document.getElementById('healthStatus').innerHTML = '<span class="status-error">❌ Server Offline</span>';
     }
   }
 
@@ -196,18 +188,26 @@
 
   async function sendCustomEmail() {
     const to = document.getElementById('emailTo').value;
-    const subject = document.getElementById('emailSubject').value;
+    const subject = document.getElementById('emailSubject').value || "Notification";
     const company_name = document.getElementById('companyName').value;
-    const body = document.getElementById('emailBody').value;
+    const bodyText = document.getElementById('emailBody').value;
+    const linkText = document.getElementById('linkText').value;
+    const linkUrl = document.getElementById('linkUrl').value;
     const status = document.getElementById('emailStatus');
 
     status.textContent = 'Sending...';
+
+    // Build HTML message with optional link
+    let finalBody = `<p>${bodyText}</p>`;
+    if (linkText && linkUrl) {
+      finalBody += `<p><a href="${linkUrl}" style="color:#2979ff;text-decoration:underline;font-weight:bold;">${linkText}</a></p>`;
+    }
 
     try {
       const res = await fetch(`${API_BASE}/api/send-notification`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ to, subject, company_name, body })
+        body: JSON.stringify({ to, subject, company_name, body: finalBody })
       });
 
       const result = await res.json();
@@ -215,7 +215,7 @@
         status.textContent = '✅ Email sent successfully!';
         status.style.color = 'green';
       } else {
-        status.textContent = `❌ Error: ${result.message || 'Failed to send email.'}`;
+        status.textContent = `❌ ${result.message || 'Failed to send email.'}`;
         status.style.color = 'red';
       }
     } catch (error) {
