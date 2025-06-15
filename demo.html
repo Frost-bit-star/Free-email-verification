@@ -122,7 +122,7 @@
 </section>
 
 <section class="glass" data-aos="fade-up" data-aos-delay="400">
-  <h2>Server Health</h2>
+  <h2>Email Server Health</h2>
   <div id="healthStatus">Checking...</div>
 </section>
 
@@ -173,12 +173,12 @@
     try {
       const res = await fetch(`${API_BASE}/health`);
       if (res.ok) {
-        document.getElementById('healthStatus').innerHTML = '<span class="status-ok">✅ API is Healthy</span>';
+        document.getElementById('healthStatus').innerHTML = '<span class="status-ok">✅ online</span>';
       } else {
         document.getElementById('healthStatus').innerHTML = '<span class="status-error">❌ API Health Check Failed</span>';
       }
     } catch (err) {
-      document.getElementById('healthStatus').innerHTML = '<span class="status-error">❌ Could not connect to API</span>';
+      document.getElementById('healthStatus').innerHTML = '<span class="status-error">❌ offline</span>';
     }
   }
 

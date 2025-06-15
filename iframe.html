@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Email Verification</title>
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 20px; }
+    input, button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 1em;
+    }
+    button:disabled { background-color: #ccc; cursor: not-allowed; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  <h3>Email Verification</h3>
+
+  <input type="text" id="username" placeholder="Your Name">
+  <input type="email" id="email" placeholder="Your Email">
+  <button id="requestCodeBtn">Send Verification Code</button>
+
+  <div id="codeSection" class="hidden">
+    <input type="text" id="code" placeholder="Enter Code">
+    <button id="verifyCodeBtn">Verify Code</button>
+  </div>
+
+  <p id="statusMessage"></p>
+
+  <script>
+    const company = "MyCompany"; // hardcoded company name
+
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const codeInput = document.getElementById('code');
+    const requestBtn = document.getElementById('requestCodeBtn');
+    const verifyBtn = document.getElementById('verifyCodeBtn');
+    const codeSection = document.getElementById('codeSection');
+    const statusMessage = document.getElementById('statusMessage');
+
+    requestBtn.onclick = () => {
+      const username = usernameInput.value.trim();
+      const email = emailInput.value.trim();
+
+      if (!username || !email) {
+        alert("Please enter your name and email.");
+        return;
+      }
+
+      fetch("https://verify-email-api-ma40.onrender.com/request-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ company, username, email })
+      })
+      .then(res => res.json())
+      .then(data => {
+        codeSection.classList.remove('hidden');
+        statusMessage.textContent = "Verification code sent!";
+        console.log(data);
+      })
+      .catch(err => {
+        statusMessage.textContent = "Failed to send code.";
+        console.error(err);
+      });
+    };
+
+    verifyBtn.onclick = () => {
+      const email = emailInput.value.trim();
+      const code = codeInput.value.trim();
+
+      fetch("https://verify-email-api-ma40.onrender.com/verify-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, code })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          statusMessage.textContent = "Email verified!";
+          // Inform parent page
+          parent.postMessage({ verified: true, email, username: usernameInput.value.trim() }, "*");
+        } else {
+          statusMessage.textContent = "Invalid code.";
+        }
+      })
+      .catch(err => {
+        statusMessage.textContent = "Verification failed.";
+        console.error(err);
+      });
+    };
+  </script>
+
+</body>
+</html>

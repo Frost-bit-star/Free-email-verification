@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loading Dashboard - StackVerify</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #f5f5f5;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      transition: opacity 1s ease;
+      opacity: 1;
+    }
+
+    .loader-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(18px);
+      border-radius: 20px;
+      padding: 40px 50px;
+      text-align: center;
+      color: #333;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+      width: 340px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .loader-box h1 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+
+    .dynamic-text {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #555;
+      margin-bottom: 20px;
+      height: 24px;
+      transition: opacity 0.5s ease;
+    }
+
+    .progress-container {
+      background: #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 18px;
+      margin: 20px 0;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, #4b0082, #6a5acd);
+      transition: width 0.2s linear;
+    }
+
+    .percentage {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #444;
+    }
+
+    .fade-out {
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, -60%); }
+      to { opacity: 1; transform: translate(-50%, -50%); }
+    }
+  </style>
+</head>
+<body id="page">
+  <div class="loader-box">
+    <h1>Loading Dashboard...</h1>
+    <div class="dynamic-text" id="textCycle">Initializing...</div>
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="percentage" id="percentage">0%</div>
+  </div>
+
+  <script>
+    const services = [
+      "Bulk Email Campaigns",
+      "SMS Verification System",
+      "WhatsApp Business Bot",
+      "Email & Phone Validation",
+      "StackVerify AI Assistant",
+      "Customer Engagement Tools"
+    ];
+
+    let textIndex = 0;
+    const textElement = document.getElementById("textCycle");
+    function cycleText() {
+      textElement.style.opacity = 0;
+      setTimeout(() => {
+        textElement.textContent = services[textIndex];
+        textElement.style.opacity = 1;
+        textIndex = (textIndex + 1) % services.length;
+      }, 400);
+    }
+    setInterval(cycleText, 3000);
+    cycleText();
+
+    // Progress + Redirect
+    let percent = 0;
+    const progressBar = document.getElementById('progressBar');
+    const percentageText = document.getElementById('percentage');
+    const page = document.getElementById('page');
+
+    const interval = setInterval(() => {
+      percent++;
+      progressBar.style.width = percent + '%';
+      percentageText.textContent = percent + '%';
+
+      if (percent >= 100) {
+        clearInterval(interval);
+        page.classList.add('fade-out');
+        setTimeout(() => {
+          window.location.href = "https://stackverify.my-board.org/dashboard.php";
+        }, 1000);
+      }
+    }, 30);
+  </script>
+</body>
+</html>

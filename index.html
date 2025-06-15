@@ -7,6 +7,12 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
   <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
     .glass {
       backdrop-filter: blur(14px);
       background: rgba(255, 255, 255, 0.15);
@@ -15,47 +21,153 @@
     }
   </style>
 </head>
-<body class="bg-gradient-to-br from-blue-100 to-indigo-200 text-gray-900">
+<body class="bg-gradient-to-br from-blue-100 to-indigo-200 text-gray-900 pt-20 overflow-x-hidden">
+
+  <!-- Header Navigation -->
+  <header class="w-full fixed top-0 left-0 z-50 backdrop-blur-lg bg-white/30 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+      
+      <!-- Brand -->
+      <a href="index.html" class="text-xl sm:text-2xl font-bold text-blue-700 tracking-wide">
+        Stack<span class="text-indigo-700">Verify</span>
+      </a>
+
+      <!-- Dropdown Menu -->
+      <div class="relative">
+        <button id="menuButton" onclick="toggleDropdown()" class="inline-flex items-center justify-center px-4 py-2 text-sm sm:text-base font-medium bg-white/30 text-gray-800 hover:bg-white/50 rounded-md shadow transition">
+          Menu
+          <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <!-- Dropdown Items -->
+        <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-44 sm:w-48 bg-white/90 backdrop-blur-md rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
+          <div class="py-1">
+            <a href="login.html" class="block px-4 py-2 text-sm text-gray-800 hover:bg-blue-100">Login</a>
+            <a href="signup.html" class="block px-4 py-2 text-sm text-gray-800 hover:bg-blue-100">Sign Up</a>
+            <a href="about.html" class="block px-4 py-2 text-sm text-gray-800 hover:bg-blue-100">About Us</a>
+            <a href="contact.html" class="block px-4 py-2 text-sm text-gray-800 hover:bg-blue-100">Contact Us</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
 
   <!-- Hero Section -->
-  <section class="min-h-screen flex items-center justify-center relative overflow-hidden px-4">
-    <div class="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-12 py-16">
-      <div class="md:w-1/2" data-aos="fade-right">
-        <h1 class="text-5xl font-extrabold mb-6">Verify Users, Instantly.</h1>
-        <p class="mb-6 text-lg text-gray-700">Stack Verify helps you confirm real users and stop spam, fraud, or fake accounts with smart, fast, and secure email or ID validation.</p>
-        <a href="demo.html" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 transition">Book demo</a>
-      </div>
-      <div class="md:w-1/2" data-aos="fade-left">
-        <div class="glass rounded-3xl p-6 shadow-2xl">
-          <img src="v.jpeg" alt="Verification" class="w-full h-auto object-contain"/>
+  <section class="min-h-screen flex items-center justify-center relative overflow-hidden px-6 py-12 bg-gradient-to-br from-[#eef2f3] via-[#dff1ff] to-[#f0f7ff]">
+    <!-- Blurred Background Circles -->
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-blue-200 rounded-full opacity-30 blur-3xl animate-pulse"></div>
+    <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-purple-200 rounded-full opacity-30 blur-3xl animate-pulse"></div>
+
+    <!-- Hero Content -->
+    <div class="relative z-10 max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-16">
+      
+      <!-- Text Content -->
+      <div class="md:w-1/2 text-center md:text-left" data-aos="fade-right">
+        <h1 class="text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+          Verify & Connect <span class="text-blue-600">Users Instantly</span>
+        </h1>
+        <p class="text-lg text-gray-700 mb-6">
+          StackVerify lets you <span class="font-semibold">validate emails, phone numbers, and WhatsApp contacts</span>, send custom newsletters, and prevent fraud — all from one smart dashboard.
+        </p>
+        <ul class="text-gray-800 mb-6 space-y-2 text-sm md:text-base">
+          <li>✅ Real-Time Email & SMS Validation</li>
+          <li>✅ Bulk WhatsApp & Newsletter Campaigns</li>
+          <li>✅ GDPR-Compliant & Secure API</li>
+          <li>✅ Instant User Access Dashboard</li>
+        </ul>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+          <a href="demo.html" class="bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 transition transform hover:scale-105">
+            Try Free Demo
+          </a>
+          <a href="#features" class="text-blue-700 font-medium hover:underline hover:text-blue-900 transition">
+            Explore Features ↓
+          </a>
         </div>
       </div>
     </div>
   </section>
+    <!-- Visual Lottie Animation -->
+    <div class="md:w-1/2 flex justify-center items-center" data-aos="fade-left">
+      <div class="bg-white/40 backdrop-blur-2xl p-6 rounded-3xl shadow-2xl">
+        <lottie-player 
+          src="https://assets9.lottiefiles.com/private_files/lf30_jrpzvtqz.json" 
+          background="transparent" speed="1" 
+          style="width: 100%; max-width: 400px; height: auto;" 
+          loop autoplay>
+        </lottie-player>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lottie Player Script -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</section>
+
+<!-- Lottie Player Script -->
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
   <!-- Features Section -->
   <section class="py-24 bg-white bg-opacity-70 backdrop-blur-lg" id="features">
-    <div class="max-w-7xl mx-auto px-4">
-      <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">What Stack Verify Offers</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-        <div class="glass p-6 rounded-xl text-center" data-aos="zoom-in">
-          <div class="text-blue-600 text-4xl mb-4">✅</div>
-          <h3 class="text-xl font-semibold mb-2">Instant Email Verification</h3>
-          <p class="text-gray-700">Ensure users are reachable and valid with smart checks on domains, MX records and disposable detection.</p>
-        </div>
-        <div class="glass p-6 rounded-xl text-center" data-aos="zoom-in" data-aos-delay="150">
-          <div class="text-green-600 text-4xl mb-4">🔒</div>
-          <h3 class="text-xl font-semibold mb-2">Secure & GDPR-Compliant</h3>
-          <p class="text-gray-700">Built with privacy and data protection in mind. We never store PII or abuse data.</p>
-        </div>
-        <div class="glass p-6 rounded-xl text-center" data-aos="zoom-in" data-aos-delay="300">
-          <div class="text-indigo-600 text-4xl mb-4">⚙️</div>
-          <h3 class="text-xl font-semibold mb-2">Easy API Integration</h3>
-          <p class="text-gray-700">Integrate in minutes with your app, form or CRM. We provide clean docs and fast responses.</p>
-        </div>
+  <div class="max-w-7xl mx-auto px-4">
+    <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">What StackVerify Offers</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+      <!-- 1. Email Verification -->
+      <div class="glass p-6 rounded-xl text-center" data-aos="zoom-in">
+        <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_hlaoozsb.json" background="transparent" speed="1" style="width: 100px; height: 100px; margin: 0 auto;" loop autoplay></lottie-player>
+        <h3 class="text-xl font-semibold mb-2 mt-4">Instant Email Verification</h3>
+        <p class="text-gray-700">Real-time email validation with typo, disposable, MX, and domain checks to keep your lists clean and accurate.</p>
       </div>
+
+      <!-- 2. WhatsApp Messaging -->
+      <div class="glass p-6 rounded-xl text-center" data-aos="zoom-in" data-aos-delay="100">
+        <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_j1adxtyb.json" background="transparent" speed="1" style="width: 100px; height: 100px; margin: 0 auto;" loop autoplay></lottie-player>
+        <h3 class="text-xl font-semibold mb-2 mt-4">WhatsApp Bulk Messaging</h3>
+        <p class="text-gray-700">Send up to 1,000 bulk WhatsApp messages to your contacts. Fast, automated, and fully integrated with your dashboard.</p>
+      </div>
+
+      <!-- 3. SMS Sending -->
+      <div class="glass p-6 rounded-xl text-center" data-aos="zoom-in" data-aos-delay="200">
+        <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_kdx6cani.json" background="transparent" speed="1" style="width: 100px; height: 100px; margin: 0 auto;" loop autoplay></lottie-player>
+        <h3 class="text-xl font-semibold mb-2 mt-4">SMS Campaigns</h3>
+        <p class="text-gray-700">Deliver SMS messages instantly across any region. Works great for OTPs, alerts, and marketing promotions.</p>
+      </div>
+
+      <!-- 4. Newsletter -->
+      <div class="glass p-6 rounded-xl text-center" data-aos="zoom-in" data-aos-delay="300">
+        <lottie-player src="https://assets6.lottiefiles.com/packages/lf20_kkflmtur.json" background="transparent" speed="1" style="width: 100px; height: 100px; margin: 0 auto;" loop autoplay></lottie-player>
+        <h3 class="text-xl font-semibold mb-2 mt-4">Custom Newsletter Builder</h3>
+        <p class="text-gray-700">Design, personalize, and schedule branded newsletters using our drag-and-drop interface or HTML editor.</p>
+      </div>
+
+      <!-- 5. Dashboard -->
+      <div class="glass p-6 rounded-xl text-center" data-aos="zoom-in" data-aos-delay="400">
+        <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_gjmecwii.json" background="transparent" speed="1" style="width: 100px; height: 100px; margin: 0 auto;" loop autoplay></lottie-player>
+        <h3 class="text-xl font-semibold mb-2 mt-4">Insightful Dashboard</h3>
+        <p class="text-gray-700">Manage campaigns, track performance, view user stats, and monitor deliverability from a single dashboard.</p>
+      </div>
+
+      <!-- 6. API and Security -->
+      <div class="glass p-6 rounded-xl text-center" data-aos="zoom-in" data-aos-delay="500">
+        <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_efkq8fdb.json" background="transparent" speed="1" style="width: 100px; height: 100px; margin: 0 auto;" loop autoplay></lottie-player>
+        <h3 class="text-xl font-semibold mb-2 mt-4">Secure API & GDPR Compliance</h3>
+        <p class="text-gray-700">Use our API for integrations. Your data is encrypted and compliant with global privacy standards.</p>
+      </div>
+
     </div>
-  </section>
+
+    <!-- CTA -->
+    <div class="mt-16 text-center" data-aos="fade-up">
+      <h3 class="text-2xl font-bold mb-4">Ready to supercharge your outreach?</h3>
+      <a href="demo.html" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-full text-lg hover:bg-blue-700 transition">Try StackVerify Free</a>
+    </div>
+  </div>
+</section>
+
+<!-- Lottie Player Script -->
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
   <!-- Stats Section -->
   <section class="py-20 bg-gradient-to-r from-indigo-600 to-blue-500 text-white">
@@ -74,43 +186,96 @@
       </div>
     </div>
   </section>
-  <!-- how to use slack -->
-  <section class="max-w-5xl mx-auto px-4 py-10">
-  <h2 class="text-3xl font-bold text-gray-800 mb-8"</h2>Usage Examples</h2>
+  
+  <section class="bg-gray-950 text-white py-16 px-4" id="pricing">
+  <div class="max-w-6xl mx-auto text-center">
+    <h2 class="text-4xl font-bold mb-4">Choose Your Plan</h2>
+    <p class="text-gray-400 mb-12">Flexible plans tailored for your business needs</p>
 
-  <!-- /request-code FETCH -->
-  <div class="mb-8">
-    <h3 class="text-xl font-semibold text-gray-700 mb-2">📤 Request Code (JavaScript - fetch)</h3>
-    <div class="relative">
-      <textarea id="fetchRequestCode" readonly
-        class="w-full h-56 bg-gray-900 text-green-200 font-mono text-sm rounded-lg p-4 resize-none focus:outline-none">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <!-- Plan 1: Free -->
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl shadow-xl p-8 hover:scale-105 transition-transform duration-300">
+        <h3 class="text-2xl font-semibold mb-4">Free</h3>
+        <p class="text-4xl font-bold mb-4">$0<span class="text-base font-medium text-gray-400">/mo</span></p>
+        <ul class="text-left space-y-2 mb-6">
+          <li>✔ Free Email Verification</li>
+          <li>✖ WhatsApp Bulk</li>
+          <li>✖ SMS Credits</li>
+          <li>✖ Dashboard Access</li>
+          <li>✖ Newsletter Tools</li>
+        </ul>
+        <a href="demo.html" class="bg-white text-gray-900 px-6 py-2 rounded-xl font-semibold hover:bg-gray-200">Get Started</a>
+      </div>
+
+      <!-- Plan 2: Starter -->
+      <div class="bg-gradient-to-br from-red-500 to-yellow-400 text-black rounded-2xl shadow-2xl p-8 hover:scale-105 transition-transform duration-300 relative">
+        <span class="absolute top-3 right-3 bg-black text-white text-xs px-3 py-1 rounded-full">Popular</span>
+        <h3 class="text-2xl font-semibold mb-4">Starter</h3>
+        <p class="text-4xl font-bold mb-4">$0.75<span class="text-base font-medium text-black">/mo</span></p>
+        <ul class="text-left space-y-2 mb-6">
+          <li>✔ Unlimited Email Sends</li>
+          <li>✔ 1000 WhatsApp Bulk</li>
+          <li>✔ 10 SMS Credits</li>
+          <li>✔ Unlimited Verifications</li>
+          <li>✔ Basic Newsletter</li>
+          <li>✔ Dashboard Access</li>
+        </ul>
+        <a href="dashboard.html" class="bg-black text-white px-6 py-2 rounded-xl font-semibold hover:bg-gray-800">Get started</a>
+      </div>
+
+      <!-- Plan 3: Enterprise -->
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl shadow-xl p-8 hover:scale-105 transition-transform duration-300">
+        <h3 class="text-2xl font-semibold mb-4">Enterprise</h3>
+        <p class="text-4xl font-bold mb-4">$5<span class="text-base font-medium text-gray-400">/mo</span></p>
+        <ul class="text-left space-y-2 mb-6">
+          <li>✔ Unlimited Email Sends</li>
+          <li>✔ Unlimited WhatsApp Bulk</li>
+          <li>✔ Unlimited SMS Credits</li>
+          <li>✔ Unlimited Verifications</li>
+          <li>✔ Custom Newsletter System</li>
+          <li>✔ Dashboard Access</li>
+        </ul>
+        <a href="dashboard.html" class="bg-white text-gray-900 px-6 py-2 rounded-xl font-semibold hover:bg-gray-200">Get started</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+  <!-- Usage Examples Section -->
+  <section class="max-w-5xl mx-auto px-4 py-10">
+    <h2 class="text-3xl font-bold text-gray-800 mb-8">Usage Examples</h2>
+
+    <!-- Request Code (JavaScript - fetch) -->
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">📤 Request Code (JavaScript - fetch)</h3>
+      <div class="relative">
+        <textarea id="fetchRequestCode" readonly class="w-full h-56 bg-gray-900 text-green-200 font-mono text-sm rounded-lg p-4 resize-none focus:outline-none">
 fetch("https://verify-email-api-ma40.onrender.com/request-code", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
   },
   body: JSON.stringify({
-    company: "MyCompany",
-    username: "johndoe",
-    email: "john@example.com"
+    company: "MyCompany",     // Replace with your company name
+    username: "johndoe",      // Replace with actual username
+    email: "john@example.com" // Replace with actual email
   })
 })
 .then(res => res.json())
-.then(data => console.log(data));
-      </textarea>
-      <button onclick="copyCode('fetchRequestCode')"
-        class="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded">
-        📋 Copy
-      </button>
+.then(data => console.log(data))
+.catch(err => console.error("Request OTP Error:", err));
+        </textarea>
+        <button onclick="copyCode('fetchRequestCode')" class="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded">📋 Copy</button>
+      </div>
     </div>
-  </div>
 
-  <!-- /request-code CURL -->
-  <div class="mb-8">
-    <h3 class="text-xl font-semibold text-gray-700 mb-2">📤 Request Code (cURL)</h3>
-    <div class="relative">
-      <textarea id="curlRequestCode" readonly
-        class="w-full h-56 bg-gray-900 text-green-200 font-mono text-sm rounded-lg p-4 resize-none focus:outline-none">
+    <!-- Request Code (cURL) -->
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">📤 Request Code (cURL)</h3>
+      <div class="relative">
+        <textarea id="curlRequestCode" readonly class="w-full h-56 bg-gray-900 text-green-200 font-mono text-sm rounded-lg p-4 resize-none focus:outline-none">
 curl -X POST https://verify-email-api-ma40.onrender.com/request-code \
   -H "Content-Type: application/json" \
   -d '{
@@ -118,70 +283,114 @@ curl -X POST https://verify-email-api-ma40.onrender.com/request-code \
     "username": "johndoe",
     "email": "john@example.com"
   }'
-      </textarea>
-      <button onclick="copyCode('curlRequestCode')"
-        class="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded">
-        📋 Copy
-      </button>
+        </textarea>
+        <button onclick="copyCode('curlRequestCode')" class="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded">📋 Copy</button>
+      </div>
     </div>
-  </div>
 
-  <!-- /verify-code FETCH -->
-  <div class="mb-8">
-    <h3 class="text-xl font-semibold text-gray-700 mb-2">✅ Verify Code (JavaScript - fetch)</h3>
-    <div class="relative">
-      <textarea id="fetchVerifyCode" readonly
-        class="w-full h-48 bg-gray-900 text-green-200 font-mono text-sm rounded-lg p-4 resize-none focus:outline-none">
+    <!-- Verify Code (JavaScript - fetch) -->
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">✅ Verify Code (JavaScript - fetch)</h3>
+      <div class="relative">
+        <textarea id="fetchVerifyCode" readonly class="w-full h-48 bg-gray-900 text-green-200 font-mono text-sm rounded-lg p-4 resize-none focus:outline-none">
 fetch("https://verify-email-api-ma40.onrender.com/verify-code", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
   },
   body: JSON.stringify({
-    email: "john@example.com",
-    code: "ABC123"
+    email: "john@example.com", // Must match the one used in request-code
+    code: "123456"             // Replace with the OTP received
   })
 })
 .then(res => res.json())
-.then(data => console.log(data));
-      </textarea>
-      <button onclick="copyCode('fetchVerifyCode')"
-        class="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded">
-        📋 Copy
-      </button>
+.then(data => console.log(data))
+.catch(err => console.error("Verify OTP Error:", err));
+        </textarea>
+        <button onclick="copyCode('fetchVerifyCode')" class="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded">📋 Copy</button>
+      </div>
     </div>
-  </div>
 
-  <!-- /verify-code CURL -->
-  <div class="mb-8">
-    <h3 class="text-xl font-semibold text-gray-700 mb-2">✅ Verify Code (cURL)</h3>
-    <div class="relative">
-      <textarea id="curlVerifyCode" readonly
-        class="w-full h-48 bg-gray-900 text-green-200 font-mono text-sm rounded-lg p-4 resize-none focus:outline-none">
+    <!-- Verify Code (cURL) -->
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">✅ Verify Code (cURL)</h3>
+      <div class="relative">
+        <textarea id="curlVerifyCode" readonly class="w-full h-48 bg-gray-900 text-green-200 font-mono text-sm rounded-lg p-4 resize-none focus:outline-none">
 curl -X POST https://verify-email-api-ma40.onrender.com/verify-code \
   -H "Content-Type: application/json" \
   -d '{
     "email": "john@example.com",
     "code": "ABC123"
   }'
-      </textarea>
-      <button onclick="copyCode('curlVerifyCode')"
-        class="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded">
-        📋 Copy
-      </button>
+        </textarea>
+        <button onclick="copyCode('curlVerifyCode')" class="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded">📋 Copy</button>
+      </div>
     </div>
-  </div>
-</section>
 
-<!-- Clipboard Copy Logic -->
-<script>
-  function copyCode(id) {
-    const el = document.getElementById(id);
-    navigator.clipboard.writeText(el.value).then(() => {
-      alert("✅ Code copied to clipboard!");
-    });
-  }
+    <!-- Embed StackVerify HTML + JS -->
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">HOW TO EMBED STACKVERIFY HTML + JS</h3>
+
+      <!-- Step 1: HTML Fields -->
+      <label class="block text-gray-600 font-medium mb-1">Step 1: Add the following fields inside your &lt;form&gt; tag</label>
+      <div class="relative mb-4">
+        <textarea id="embedHtmlCode" readonly class="w-full h-72 bg-gray-900 text-green-200 font-mono text-sm rounded-lg p-4 resize-none focus:outline-none">
+<!-- 📌 Registration Input Fields -->
+<input type="text" id="username" placeholder="Username" required />
+<input type="email" id="email" placeholder="Email" required />
+<input type="text" id="phone" placeholder="Phone Number" required />
+<input type="password" id="password" placeholder="Password" required />
+
+<!-- 📩 Button to Send OTP -->
+<button id="sendOtpBtn">Send OTP</button>
+
+<!-- 🔐 OTP Input Section (Initially hidden, shown after OTP is sent) -->
+<div id="otpSection" class="hidden">
+  <input type="text" id="otp" maxlength="6" placeholder="Enter OTP" />
+  <button id="verifyOtpBtn">Verify OTP</button>
+</div>
+
+<!-- 📣 Message Display Area for Success or Errors -->
+<p id="error"></p>
+        </textarea>
+        <button onclick="copyCode('embedHtmlCode')" class="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded">📋 Copy</button>
+      </div>
+
+      <!-- Step 2: JS Script -->
+      <label class="block text-gray-600 font-medium mb-1">Step 2: Paste this script right before your <code>&lt;/body&gt;</code> tag</label>
+      <div class="relative">
+        <textarea id="embedScriptCode" readonly class="w-full h-44 bg-gray-900 text-yellow-200 font-mono text-sm rounded-lg p-4 resize-none focus:outline-none">
+<!-- 🚀 StackVerify OTP Script -->
+<script 
+  src="https://stackverify.vercel.app/otp.js" 
+  data-company="YourCompanyName" 
+  data-register-endpoint="https://yourdomain.com/register.php" 
+  data-redirect="/dashboard.html">
 </script>
+        </textarea>
+        <button onclick="copyCode('embedScriptCode')" class="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded">📋 Copy</button>
+      </div>
+
+      <!-- Explanation Section -->
+      <div class="mt-6 text-sm text-gray-600 leading-relaxed">
+        <p><strong>📋 Step 1:</strong> Place the input fields inside your existing form where users will register. These fields will be used to collect the user's basic info before verifying their email.</p>
+        <p class="mt-2"><strong>🔐 Step 2:</strong> When the user clicks <code>Send OTP</code>, a 6-digit code will be emailed to them using StackVerify. They’ll enter it to verify.</p>
+        <p class="mt-2"><strong>📤 Step 3:</strong> Once OTP is verified, StackVerify automatically submits their data to your API (defined in <code>data-register-endpoint</code>).</p>
+        <p class="mt-2"><strong>➡️ Step 4:</strong> After registration, the user will be redirected to the URL set in <code>data-redirect</code>.</p>
+        <p class="mt-2"><strong>🔧 Tip:</strong> Customize the API endpoint and redirect path for each platform using script <code>data-*</code> attributes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Clipboard Copy Logic -->
+  <script>
+    function copyCode(id) {
+      const el = document.getElementById(id);
+      navigator.clipboard.writeText(el.value).then(() => {
+        alert("✅ Code copied to clipboard!");
+      });
+    }
+  </script>
 
   <!-- Testimonials Section -->
   <section class="py-24 bg-white">
@@ -208,43 +417,44 @@ curl -X POST https://verify-email-api-ma40.onrender.com/verify-code \
   </section>
 
   <!-- Footer -->
-<footer class="py-8 bg-gray-800 text-white text-center text-sm">
-  <div class="flex justify-center items-center space-x-6 mb-4">
-    <!-- Portfolio -->
-    <a href="https://stackmorgan.vercel.app" target="_blank" aria-label="Portfolio" class="transform hover:scale-110 transition">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m2 8H7a2 2 0 01-2-2V7a2 2 0 012-2h3V3h4v2h3a2 2 0 012 2v11a2 2 0 01-2 2z"/>
-      </svg>
-    </a>
+  <footer class="py-8 bg-gray-800 text-white text-center text-sm">
+    <div class="flex justify-center items-center space-x-6 mb-4">
+      <!-- Portfolio -->
+      <a href="https://stackmorgan.vercel.app" target="_blank" aria-label="Portfolio" class="transform hover:scale-110 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m2 8H7a2 2 0 01-2-2V7a2 2 0 012-2h3V3h4v2h3a2 2 0 012 2v11a2 2 0 01-2 2z"/>
+        </svg>
+      </a>
 
-    <!-- GitHub -->
-    <a href="https://github.com/Frost-bit-star" target="_blank" aria-label="GitHub" class="transform hover:scale-110 transition">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-blue-400" viewBox="0 0 24 24" fill="currentColor">
-<path d="M12 0.5C5.37 0.5 0 5.87 0 12.5C0 17.93 3.438 22.43 8.205 23.98C8.805 24.07 9.025 23.72 9.025 23.42C9.025 23.15 9.015 22.47 9.01 21.5C5.672 22.22 4.968 19.82 4.968 19.82C4.422 18.4 3.633 18.04 3.633 18.04C2.546 17.3 3.717 17.32 3.717 17.32C4.922 17.4 5.555 18.56 5.555 18.56C6.616 20.36 8.338 19.86 9.05 19.54C9.15 18.78 9.45 18.27 9.785 17.97C7.122 17.66 4.343 16.6 4.343 11.86C4.343 10.52 4.828 9.43 5.633 8.58C5.508 8.28 5.083 7 5.743 5.26C5.743 5.26 6.773 4.92 9.01 6.56C9.98 6.3 11.01 6.17 12.04 6.17C13.07 6.17 14.1 6.3 15.07 6.56C17.3 4.92 18.33 5.26 18.33 5.26C18.99 7 18.57 8.28 18.44 8.58C19.25 9.43 19.73 10.52 19.73 11.86C19.73 16.61 16.95 17.66 14.28 17.97C14.73 18.36 15.13 19.09 15.13 20.18C15.13 21.75 15.11 22.97 15.11 23.42C15.11 23.72 15.33 24.08 15.93 23.98C20.7 22.43 24 17.93 24 12.5C24 5.87 18.63 0.5 12 0.5Z"/>
-      </svg>
-    </a>
+      <!-- GitHub -->
+      <a href="https://github.com/Frost-bit-star" target="_blank" aria-label="GitHub" class="transform hover:scale-110 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-blue-400" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0.5C5.37 0.5 0 5.87 0 12.5C0 17.93 3.438 22.43 8.205 23.98C8.805 24.07 9.025 23.72 9.025 23.42C9.025 23.15 9.015 22.47 9.01 21.5C5.672 22.22 4.968 19.82 4.968 19.82C4.422 18.4 3.633 18.04 3.633 18.04C2.546 17.3 3.717 17.32 3.717 17.32C4.922 17.4 5.555 18.56 5.555 18.56C6.616 20.36 8.338 19.86 9.05 19.54C9.15 18.78 9.45 18.27 9.785 17.97C7.122 17.66 4.343 16.6 4.343 11.86C4.343 10.52 4.828 9.43 5.633 8.58C5.508 8.28 5.083 7 5.743 5.26C5.743 5.26 6.773 4.92 9.01 6.56C9.98 6.3 11.01 6.17 12.04 6.17C13.07 6.17 14.1 6.3 15.07 6.56C17.3 4.92 18.33 5.26 18.33 5.26C18.99 7 18.57 8.28 18.44 8.58C19.25 9.43 19.73 10.52 19.73 11.86C19.73 16.61 16.95 17.66 14.28 17.97C14.73 18.36 15.13 19.09 15.13 20.18C15.13 21.75 15.11 22.97 15.11 23.42C15.11 23.72 15.33 24.08 15.93 23.98C20.7 22.43 24 17.93 24 12.5C24 5.87 18.63 0.5 12 0.5Z"/>
+        </svg>
+      </a>
 
-    <!-- Facebook -->
-    <a href="https://facebook.com" target="_blank" aria-label="Facebook" class="transform hover:scale-110 transition">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-[6/12, 4:35 PM] Chatgpt: <path d="M22.675 0h-21.35C.595 0 0 .595 0 1.325v21.351C0 23.405.595 24 1.325 24h11.494v-9.294H9.691v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.658-4.788 1.325 0 2.464.099 2.797.143v3.24l-1.92.001c-1.505 0-1.797.715-1.797 1.763v2.31h3.587l-.467 3.622h-3.12V24h6.116c.729 0 1.324-.595 1.324-1.324V1.325C24 .595 23.405 0 22.675 0z"/>
-      </svg>
-    </a>
+      <!-- Facebook -->
+      <a href="https://facebook.com" target="_blank" aria-label="Facebook" class="transform hover:scale-110 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M22.675 0h-21.35C.595 0 0 .595 0 1.325v21.351C0 23.405.595 24 1.325 24h11.494v-9.294H9.691v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.658-4.788 1.325 0 2.464.099 2.797.143v3.24l-1.92.001c-1.505 0-1.797.715-1.797 1.763v2.31h3.587l-.467 3.622h-3.12V24h6.116c.729 0 1.324-.595 1.324-1.324V1.325C24 .595 23.405 0 22.675 0z"/>
+        </svg>
+      </a>
 
-    <!-- Instagram -->
-    <a href="https://instagram.com" target="_blank" aria-label="Instagram" class="transform hover:scale-110 transition">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-pink-400" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2.2c3.2 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.4a4.92 4.92 0 011.78 1.05 4.92 4.92 0 011.05 1.78c.16.46.35 1.26.4 2.43.058 1.266.07 1.65.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.4 2.43a4.92 4.92 0 01-1.05 1.78 4.92 4.92 0 01-1.78 1.05c-.46.16-1.26.35-2.43.4-1.266.058-1.65.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.4a4.92 4.92 0 01-1.78-1.05 4.92 4.92 0 01-1.05-1.78c-.16-.46-.35-1.26-.4-2.43C2.212 15.784 2.2 15.4 2.2 12.2s.012-3.584.07-4.85c.054-1.17.24-1.97.4-2.43A4.92 4.92 0 013.72 3.14a4.92 4.92 0 011.78-1.05c.46-.16 1.26-.35 2.43-.4C8.416 2.212 8.8 2.2 12 2.2zm0 1.8c-3.14 0-3.508.012-4.74.07-.98.045-1.51.21-1.86.35a3.16 3.16 0 00-1.14.74 3.16 3.16 0 00-.74 1.14c-.14.35-.305.88-.35 1.86-.058 1.232-.07 1.6-.07 4.74s.012 3.508.07 4.74c.045.98.21 1.51.35 1.86.17.42.42.79.74 1.14.35.32.72.57 1.14.74.35.14.88.305 1.86.35 1.232.058 1.6.07 4.74.07s3.508-.012 4.74-.07c.98-.045 1.51-.21 1.86-.35a3.16 3.16 0 001.14-.74 3.16 3.16 0 00.74-1.14c.14-.35.305-.88.35-1.86.058-1.232.07-1.6.07-4.74s-.012-3.508-.07-4.74c-.045-.98-.21-1.51-.35-1.86a3.16 3.16 0 00-.74-1.14 3.16 3.16 0 00-1.14-.74c-.35-.14-.88-.305-1.86-.35-1.232-.058-1.6-.07-4.74-.07zM12 5.8a6.2 6.2 0 110 12.4 6.2 6.2 0 010-12.4zm0 10.2a4 4 0 100-8 4 4 0 000 8zm6.4-10.8a1.44 1.44 0 110 2.88 1.44 1.44 0 010-2.88z"/>
-</svg>
-    </a>
-  </div>
+      <!-- Instagram -->
+      <a href="https://instagram.com" target="_blank" aria-label="Instagram" class="transform hover:scale-110 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-pink-400" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2.2c3.2 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.4a4.92 4.92 0 011.78 1.05 4.92 4.92 0 011.05 1.78c.16.46.35 1.26.4 2.43.058 1.266.07 1.65.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.4 2.43a4.92 4.92 0 01-1.05 1.78 4.92 4.92 0 01-1.78 1.05c-.46.16-1.26.35-2.43.4-1.266.058-1.65.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.4a4.92 4.92 0 01-1.78-1.05 4.92 4.92 0 01-1.05-1.78c-.16-.46-.35-1.26-.4-2.43C2.212 15.784 2.2 15.4 2.2 12.2s.012-3.584.07-4.85c.054-1.17.24-1.97.4-2.43A4.92 4.92 0 013.72 3.14a4.92 4.92 0 011.78-1.05c.46-.16 1.26-.35 2.43-.4C8.416 2.212 8.8 2.2 12 2.2zm0 1.8c-3.14 0-3.508.012-4.74.07-.98.045-1.51.21-1.86.35a3.16 3.16 0 00-1.14.74 3.16 3.16 0 00-.74 1.14c-.14.35-.305.88-.35 1.86-.058 1.232-.07 1.6-.07 4.74s.012 3.508.07 4.74c.045.98.21 1.51.35 1.86.17.42.42.79.74 1.14.35.32.72.57 1.14.74.35.14.88.305 1.86.35 1.232.058 1.6.07 4.74.07s3.508-.012 4.74-.07c.98-.045 1.51-.21 1.86-.35a3.16 3.16 0 001.14-.74 3.16 3.16 0 00.74-1.14c.14-.35.305-.88.35-1.86.058-1.232.07-1.6.07-4.74s-.012-3.508-.07-4.74c-.045-.98-.21-1.51-.35-1.86a3.16 3.16 0 00-.74-1.14 3.16 3.16 0 00-1.14-.74c-.35-.14-.88-.305-1.86-.35-1.232-.058-1.6-.07-4.74-.07zM12 5.8a6.2 6.2 0 110 12.4 6.2 6.2 0 010-12.4zm0 10.2a4 4 0 100-8 4 4 0 000 8zm6.4-10.8a1.44 1.44 0 110 2.88 1.44 1.44 0 010-2.88z"/>
+        </svg>
+      </a>
+    </div>
 
-  <p>&copy; <span id="year"></span> Stack Verify. All rights reserved.</p>
+    <p>&copy; <span id="year"></span> Stack Verify. All rights reserved.</p>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
-</footer>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </footer>
+
   <!-- AOS Init -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script>
@@ -253,5 +463,28 @@ curl -X POST https://verify-email-api-ma40.onrender.com/verify-code \
       once: true,
     });
   </script>
+  <!-- Script for Dropdown Toggle -->
+  <script>
+    function toggleDropdown() {
+      const menu = document.getElementById('dropdownMenu');
+      menu.classList.toggle('hidden');
+    }
+
+    // Optional: Close on outside click
+    document.addEventListener('click', function (e) {
+      const button = document.getElementById('menuButton');
+      const menu = document.getElementById('dropdownMenu');
+      if (!button.contains(e.target) && !menu.contains(e.target)) {
+        menu.classList.add('hidden');
+      }
+    });
+  </script>
+  <script>
+    function toggleDropdown() {
+      const menu = document.getElementById('dropdownMenu');
+      menu.classList.toggle('hidden');
+    }
+  </script>
+  
 </body>
 </html>
