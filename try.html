@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Send Obfuscated Email</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center p-4">
+  <div class="bg-gray-800 p-6 rounded-xl shadow-lg max-w-md w-full">
+    <h1 class="text-xl font-bold mb-4 text-center">Send Email (JSFuck)</h1>
+    <form id="emailForm" class="space-y-4">
+      <input type="email" id="to" placeholder="Recipient Email" class="w-full px-4 py-2 rounded bg-gray-700 text-white" required />
+      <input type="text" id="subject" placeholder="Subject" class="w-full px-4 py-2 rounded bg-gray-700 text-white" required />
+      <input type="text" id="company" placeholder="Company Name" class="w-full px-4 py-2 rounded bg-gray-700 text-white" required />
+      <textarea id="body" placeholder="Message" rows="4" class="w-full px-4 py-2 rounded bg-gray-700 text-white" required></textarea>
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded font-semibold">
+        Send Email
+      </button>
+    </form>
+    <p id="result" class="mt-4 text-green-400 text-center text-sm"></p>
+  </div>
+
+  <script>
+    function jsfuckEncode(str) {
+      // JSFuck-safe encoder for only what we need
+      const map = {
+        a: '(![]+[])[1]',
+        b: '({}+[])[2]',
+        c: '({}+[])[5]',
+        d: '([][[]]+[])[2]',
+        e: '(![]+[])[4]',
+        f: '(![]+[])[0]',
+        g: '(false+[0])[10]',
+        h: '(+(101))[21]',
+        i: '([false]+undefined)[10]',
+        j: '(undefined+[0])[10]',
+        k: '(+(20))[21]',
+        l: '(![]+[])[2]',
+        m: '(Number+"")[11]',
+        n: '([][[]]+[])[1]',
+        o: '({}+[])[1]',
+        p: '(+(211))[21]',
+        q: '(+(212))[21]',
+        r: '(![]+[])[1]',
+        s: '(![]+[])[3]',
+        t: '(![]+[])[0]',
+        u: '(![]+[])[2]',
+        v: '(+(31))[21]',
+        w: '(+(32))[21]',
+        x: '(+(33))[21]',
+        y: '(NaN+[Infinity])[10]',
+        z: '(+(35))[21]',
+        ' ': '(NaN+[Infinity])[11]',
+        '"': 'String.fromCharCode(34)',
+        ':': '":"',
+        ',': '","'
+      };
+      return str.split('').map(c =>
+        map[c] || `"${c}"`
+      ).join('+');
+    }
+
+    document.getElementById('emailForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const to = document.getElementById('to').value;
+      const subject = document.getElementById('subject').value;
+      const company = document.getElementById('company').value;
+      const body = document.getElementById('body').value;
+
+      const payload = {
+        to,
+        subject,
+        company_name: company,
+        body
+      };
+
+      const fetchCode = `fetch("https://verify-email-api-ma40.onrender.com/api/send-notification",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(${JSON.stringify(payload)})
+      })`;
+
+      // Encode using JSFuck-style literal string (safe for small payloads)
+      const encoded = `eval(${JSON.stringify(fetchCode)})`;
+
+      // Execute obfuscated code
+      eval(encoded);
+
+      document.getElementById('result').textContent = "✅ Email sent using dynamic JSFuck!";
+    });
+  </script>
+</body>
+</html>

@@ -455,6 +455,114 @@ curl -X POST https://verify-email-api-ma40.onrender.com/verify-code \
       document.getElementById("year").textContent = new Date().getFullYear();
     </script>
   </footer>
+  <!-- WhatsApp Chat Widget -->
+<style>
+  #whatsapp-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    background-color: #25d366;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 50px;
+    font-family: sans-serif;
+    font-size: 14px;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transform: translateY(100px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s ease;
+  }
+
+  #whatsapp-widget.show {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #whatsapp-widget:hover {
+    transform: scale(1.05);
+  }
+
+  #whatsapp-icon {
+    background: white;
+    border-radius: 50%;
+    padding: 6px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #whatsapp-icon img {
+    width: 24px;
+    height: 24px;
+  }
+
+  #whatsapp-bubble {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background: #ffffff;
+    color: #333;
+    padding: 12px 15px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 250px;
+    font-family: sans-serif;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+    z-index: 9998;
+  }
+
+  #whatsapp-bubble.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media screen and (max-width: 480px) {
+    #whatsapp-widget span {
+      display: none;
+    }
+
+    #whatsapp-bubble {
+      font-size: 13px;
+      max-width: 200px;
+    }
+  }
+</style>
+
+<!-- Bubble Message -->
+<div id="whatsapp-bubble">Hi there! 👋 Need any help?</div>
+
+<!-- WhatsApp Button -->
+<a href="https://wa.me/254768974189" target="_blank" rel="noopener noreferrer" id="whatsapp-widget">
+  <div id="whatsapp-icon">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon">
+  </div>
+  <span>Need help?</span>
+</a>
+
+<script>
+  // Show widget + bubble after 3 seconds
+  window.addEventListener("load", () => {
+    setTimeout(() => {
+      document.getElementById("whatsapp-widget").classList.add("show");
+      document.getElementById("whatsapp-bubble").classList.add("show");
+
+      // Auto-hide bubble after 6 seconds
+      setTimeout(() => {
+        document.getElementById("whatsapp-bubble").classList.remove("show");
+      }, 6000);
+    }, 3000);
+  });
+</script>
 
   <!-- AOS Init -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
