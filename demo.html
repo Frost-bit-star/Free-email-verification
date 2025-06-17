@@ -99,7 +99,7 @@
     }
     #adContent {
       background: white;
-      width: 320px;
+      width: 340px;
       max-width: 90vw;
       border-radius: 15px;
       padding: 20px;
@@ -110,10 +110,9 @@
       position: relative;
       overflow: hidden;
     }
-    #adContent iframe {
+    #adRotator {
       width: 300px;
       height: 250px;
-      border: none;
       margin-bottom: 15px;
     }
     #countdown {
@@ -121,6 +120,7 @@
       margin-bottom: 10px;
       font-size: 1.2rem;
       color: #333;
+      text-align: center;
     }
     #continueBtn {
       background: #2979ff;
@@ -203,26 +203,55 @@
   <div id="adContent">
     <button id="closeAdBtn" aria-label="Close Ad Popup">&times;</button>
     <h3 id="adTitle">Sponsored Ad</h3>
-    <iframe sandbox="allow-scripts allow-same-origin" src="ad.html"></iframe>
+    <div id="adRotator"></div>
     <div id="countdown">Please wait 8 seconds...</div>
     <button id="continueBtn">Continue to Send Email</button>
   </div>
 </div>
 
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>
   AOS.init();
+
   const API_BASE = 'https://rocket-7t34.onrender.com';
   const AD_KEY = 'lastAdSeenTimestamp';
   const AD_DELAY_SECONDS = 8;
   let emailPayload = null;
 
+  // Rotate ads inside #adRotator div
+  function rotateAds() {
+    const adRotator = document.getElementById('adRotator');
+    let toggle = true;
+
+    function showNextAd() {
+      adRotator.innerHTML = '';
+      if (toggle) {
+        // Script ad
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = '//pl26942463.profitableratecpm.com/b3/2c/57/b32c5778b86d7fad7bc323a35bd2fd97.js';
+        adRotator.appendChild(script);
+      } else {
+        // Iframe ad
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://www.profitableratecpm.com/wugcxed85?key=8c89055f25c555d17c05052fc6f35f03';
+        iframe.width = '300';
+        iframe.height = '250';
+        iframe.style.border = 'none';
+        adRotator.appendChild(iframe);
+      }
+      toggle = !toggle;
+    }
+
+    showNextAd();
+    return setInterval(showNextAd, 8000);
+  }
+
   function hasSeenAdToday() {
     const lastSeen = localStorage.getItem(AD_KEY);
     if (!lastSeen) return false;
     const lastSeenTime = parseInt(lastSeen, 10);
-    return (Date.now() - lastSeenTime) < 86400000; // 24 hours
+    return (Date.now() - lastSeenTime) < 86400000; // 24h
   }
 
   async function sendDelayedEmail() {
@@ -253,31 +282,12 @@
     document.getElementById('adPopup').style.display = 'flex';
     document.getElementById('continueBtn').style.display = 'none';
     document.getElementById('countdown').textContent = `Please wait ${AD_DELAY_SECONDS} seconds...`;
-    startCountdown();
+    rotateAds(); // start ad rotation when popup opens
   }
 
   function closeAdPopup() {
     document.getElementById('adPopup').style.display = 'none';
-  }
-
-  function startCountdown() {
-    let seconds = AD_DELAY_SECONDS;
-    const countdownElem = document.getElementById('countdown');
-    const continueBtn = document.getElementById('continueBtn');
-    continueBtn.disabled = true;
-    continueBtn.style.display = 'none';
-
-    const countdown = setInterval(() => {
-      seconds--;
-      if (seconds > 0) {
-        countdownElem.textContent = `Please wait ${seconds} seconds...`;
-      } else {
-        clearInterval(countdown);
-        countdownElem.textContent = '✅ You may now continue.';
-        continueBtn.disabled = false;
-        continueBtn.style.display = 'inline-block';
-      }
-    }, 1000);
+    clearInterval(window.adRotationInterval);
   }
 
   async function sendCustomEmail() {
@@ -307,9 +317,28 @@
       status.style.color = 'orange';
       await sendDelayedEmail();
     } else {
-      status.textContent = '⏳ Ad required. Please wait...';
-      status.style.color = 'orange';
       openAdPopup();
+      status.textContent = '⏳ Please wait for the ad...';
+      status.style.color = 'orange';
+      let seconds = AD_DELAY_SECONDS;
+      const countdownElem = document.getElementById('countdown');
+      const continueBtn = document.getElementById('continueBtn');
+      continueBtn.style.display = 'none';
+
+      if(window.adRotationInterval) clearInterval(window.adRotationInterval);
+      window.adRotationInterval = rotateAds();
+
+      const countdown = setInterval(() => {
+        seconds--;
+        if (seconds > 0) {
+          countdownElem.textContent = `Please wait ${seconds} seconds...`;
+        } else {
+          clearInterval(countdown);
+          countdownElem.textContent = 'You may now continue.';
+          continueBtn.style.display = 'inline-block';
+          clearInterval(window.adRotationInterval);
+        }
+      }, 1000);
     }
   }
 
