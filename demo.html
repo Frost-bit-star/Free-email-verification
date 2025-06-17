@@ -27,8 +27,10 @@
       border-radius: 20px;
       box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
       backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.18);
       transition: transform 0.3s ease;
+      position: relative;
     }
     .glass:hover {
       transform: scale(1.01);
@@ -85,53 +87,99 @@
       color: #fff;
     }
 
-    /* Ad Modal Styles */
-    #adModal {
+    #adPopup {
       display: none;
       position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 1000;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 9999;
       justify-content: center;
       align-items: center;
+      backdrop-filter: blur(5px);
     }
     #adContent {
       background: white;
-      border-radius: 10px;
-      padding: 0;
+      width: 320px;
+      max-width: 90vw;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
       overflow: hidden;
-      width: 90%;
-      max-width: 360px;
-      text-align: center;
     }
-    #adIframe {
-      width: 100%;
-      height: 300px;
+    #adContent iframe {
+      width: 300px;
+      height: 250px;
       border: none;
+      margin-bottom: 15px;
     }
-    #confirmBtn {
+    #countdown {
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+      color: #333;
+    }
+    #continueBtn {
       background: #2979ff;
       color: white;
-      font-weight: bold;
       border: none;
-      padding: 1rem;
-      width: 100%;
-      font-size: 1rem;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-weight: bold;
       cursor: pointer;
-      border-top: 1px solid #ccc;
+      display: none;
+      transition: background 0.3s ease;
     }
-    #confirmBtn[disabled] {
-      background: #ccc;
-      cursor: not-allowed;
+    #continueBtn:hover {
+      background: #1c5fd0;
+    }
+    #closeAdBtn {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+      transition: color 0.3s ease;
+    }
+    #closeAdBtn:hover {
+      color: #555;
     }
   </style>
 </head>
 <body>
 
 <a href="index.html" class="back-btn">← Back to Home</a>
+
 <h1 data-aos="fade-down">📧 Email API Playground</h1>
 
 <section class="glass" data-aos="fade-up">
+  <h2>Request Verification Code</h2>
+  <form id="requestForm">
+    <input type="text" name="company" placeholder="Company" required>
+    <input type="text" name="username" placeholder="Username" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <button type="submit">Send Code</button>
+  </form>
+  <pre id="requestResult"></pre>
+</section>
+
+<section class="glass" data-aos="fade-up" data-aos-delay="100">
+  <h2>Verify Code</h2>
+  <form id="verifyForm">
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="text" name="code" placeholder="Code (e.g. 1A2B3C)" required>
+    <button type="submit">Verify</button>
+  </form>
+  <pre id="verifyResult"></pre>
+</section>
+
+<section class="glass" data-aos="fade-up" data-aos-delay="200">
   <h2>Send Custom Email</h2>
   <div class="form-group">
     <input type="email" id="emailTo" placeholder="Recipient Email" required>
@@ -140,16 +188,24 @@
     <textarea id="emailBody" placeholder="Main message (before link)" rows="4"></textarea>
     <input type="text" id="linkText" placeholder="CTA Link Text (e.g. Track Order)" />
     <input type="url" id="linkUrl" placeholder="URL to link to (e.g. https://...)" />
-    <button onclick="handleAdAndSend()">Send Custom Email</button>
+    <button id="sendEmailBtn">Send Custom Email</button>
     <p id="emailStatus" class="text-center text-sm mt-2"></p>
   </div>
 </section>
 
-<!-- Modal for Ad -->
-<div id="adModal">
+<section class="glass" data-aos="fade-up" data-aos-delay="300">
+  <h2>Email Server Health</h2>
+  <div id="healthStatus">Checking...</div>
+</section>
+
+<!-- Ad Popup -->
+<div id="adPopup" aria-modal="true" role="dialog" aria-labelledby="adTitle" tabindex="-1">
   <div id="adContent">
-    <iframe id="adIframe" src="ad.html" sandbox="allow-scripts allow-same-origin" allow="fullscreen"></iframe>
-    <button id="confirmBtn" disabled>Confirm (5)</button>
+    <button id="closeAdBtn" aria-label="Close Ad Popup">&times;</button>
+    <h3 id="adTitle">Sponsored Ad</h3>
+    <iframe sandbox="allow-scripts allow-same-origin" src="ad.html"></iframe>
+    <div id="countdown">Please wait 8 seconds...</div>
+    <button id="continueBtn">Continue to Send Email</button>
   </div>
 </div>
 
@@ -157,56 +213,58 @@
 <script>
   AOS.init();
   const API_BASE = 'https://rocket-7t34.onrender.com';
+  const AD_KEY = 'lastAdSeenTimestamp';
+  const AD_DELAY_SECONDS = 8;
+  let emailPayload = null;
 
-  function getTodayKey() {
-    const now = new Date();
-    return `ad-shown-${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+  function hasSeenAdToday() {
+    const lastSeen = localStorage.getItem(AD_KEY);
+    if (!lastSeen) return false;
+    const lastSeenTime = parseInt(lastSeen, 10);
+    return (Date.now() - lastSeenTime) < 86400000; // 24h
   }
 
-  async function handleAdAndSend() {
-    const todayKey = getTodayKey();
-    if (localStorage.getItem(todayKey)) {
-      sendCustomEmail();
-    } else {
-      showAdPopup(() => {
-        localStorage.setItem(todayKey, 'true');
-        sendCustomEmail();
+  async function sendDelayedEmail() {
+    const status = document.getElementById('emailStatus');
+    try {
+      const res = await fetch(`${API_BASE}/api/send-notification`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(emailPayload)
       });
+      const result = await res.json();
+      if (res.ok) {
+        status.textContent = '✅ Email sent successfully!';
+        status.style.color = 'green';
+        localStorage.setItem(AD_KEY, Date.now().toString());
+      } else {
+        status.textContent = `❌ ${result.message || 'Failed to send email.'}`;
+        status.style.color = 'red';
+      }
+    } catch (error) {
+      status.textContent = '❌ Network error. Please try again.';
+      status.style.color = 'red';
     }
+    closeAdPopup();
   }
 
-  function showAdPopup(onConfirm) {
-    const modal = document.getElementById('adModal');
-    const confirmBtn = document.getElementById('confirmBtn');
-    let countdown = 5;
+  function openAdPopup() {
+    document.getElementById('adPopup').style.display = 'flex';
+    document.getElementById('continueBtn').style.display = 'none';
+    document.getElementById('countdown').textContent = `Please wait ${AD_DELAY_SECONDS} seconds...`;
+  }
 
-    confirmBtn.disabled = true;
-    confirmBtn.textContent = `Confirm (${countdown})`;
-    modal.style.display = 'flex';
-
-    const interval = setInterval(() => {
-      countdown--;
-      if (countdown <= 0) {
-        clearInterval(interval);
-        confirmBtn.disabled = false;
-        confirmBtn.textContent = 'Confirm';
-        confirmBtn.onclick = () => {
-          modal.style.display = 'none';
-          onConfirm();
-        };
-      } else {
-        confirmBtn.textContent = `Confirm (${countdown})`;
-      }
-    }, 1000);
+  function closeAdPopup() {
+    document.getElementById('adPopup').style.display = 'none';
   }
 
   async function sendCustomEmail() {
-    const to = document.getElementById('emailTo').value;
-    const subject = document.getElementById('emailSubject').value || "Notification";
-    const company_name = document.getElementById('companyName').value;
-    const bodyText = document.getElementById('emailBody').value;
-    const linkText = document.getElementById('linkText').value;
-    const linkUrl = document.getElementById('linkUrl').value;
+    const to = document.getElementById('emailTo').value.trim();
+    const subject = document.getElementById('emailSubject').value.trim() || "Notification";
+    const company_name = document.getElementById('companyName').value.trim();
+    const bodyText = document.getElementById('emailBody').value.trim();
+    const linkText = document.getElementById('linkText').value.trim();
+    const linkUrl = document.getElementById('linkUrl').value.trim();
     const status = document.getElementById('emailStatus');
 
     if (!to || !company_name || !bodyText) {
@@ -220,29 +278,99 @@
       finalBody += `<p><a href="${linkUrl}" style="color:#2979ff;text-decoration:underline;font-weight:bold;">${linkText}</a></p>`;
     }
 
-    status.textContent = '⏳ Sending...';
-    status.style.color = 'orange';
+    emailPayload = { to, subject, company_name, body: finalBody };
 
-    try {
-      const res = await fetch(`${API_BASE}/api/send-notification`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ to, subject, company_name, body: finalBody })
-      });
+    if (hasSeenAdToday()) {
+      status.textContent = '⏳ Sending email...';
+      status.style.color = 'orange';
+      await sendDelayedEmail();
+    } else {
+      openAdPopup();
+      status.textContent = '⏳ Please wait for the ad...';
+      status.style.color = 'orange';
+      let seconds = AD_DELAY_SECONDS;
+      const countdownElem = document.getElementById('countdown');
+      const continueBtn = document.getElementById('continueBtn');
+      continueBtn.style.display = 'none';
 
-      const result = await res.json();
-      if (res.ok) {
-        status.textContent = '✅ Email sent successfully!';
-        status.style.color = 'green';
-      } else {
-        status.textContent = `❌ ${result.message || 'Failed to send email.'}`;
-        status.style.color = 'red';
-      }
-    } catch (error) {
-      status.textContent = '❌ Network error. Please try again.';
-      status.style.color = 'red';
+      const countdown = setInterval(() => {
+        seconds--;
+        if (seconds > 0) {
+          countdownElem.textContent = `Please wait ${seconds} seconds...`;
+        } else {
+          clearInterval(countdown);
+          countdownElem.textContent = 'You may now continue.';
+          continueBtn.style.display = 'inline-block';
+        }
+      }, 1000);
     }
   }
+
+  document.getElementById('sendEmailBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    sendCustomEmail();
+  });
+
+  document.getElementById('continueBtn').addEventListener('click', async () => {
+    const status = document.getElementById('emailStatus');
+    status.textContent = '⏳ Sending email...';
+    status.style.color = 'orange';
+    await sendDelayedEmail();
+  });
+
+  document.getElementById('closeAdBtn').addEventListener('click', () => {
+    closeAdPopup();
+    const status = document.getElementById('emailStatus');
+    status.textContent = '⚠️ You cancelled the ad. Email not sent.';
+    status.style.color = 'red';
+  });
+
+  document.getElementById('requestForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const payload = {
+      company: form.company.value,
+      username: form.username.value,
+      email: form.email.value
+    };
+    const res = await fetch(`${API_BASE}/request-code`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    document.getElementById('requestResult').textContent = JSON.stringify(data, null, 2);
+  });
+
+  document.getElementById('verifyForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const payload = {
+      email: form.email.value,
+      code: form.code.value
+    };
+    const res = await fetch(`${API_BASE}/verify-code`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    document.getElementById('verifyResult').textContent = JSON.stringify(data, null, 2);
+  });
+
+  async function checkHealth() {
+    try {
+      const res = await fetch(`${API_BASE}/health`);
+      document.getElementById('healthStatus').innerHTML = res.ok
+        ? '<span class="status-ok">✅ Server is Online</span>'
+        : '<span class="status-error">❌ Server Health Check Failed</span>';
+    } catch (err) {
+      document.getElementById('healthStatus').innerHTML = '<span class="status-error">❌ Server Offline</span>';
+    }
+  }
+
+  checkHealth();
 </script>
+
 </body>
 </html>
