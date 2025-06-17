@@ -121,10 +121,8 @@
     <input type="text" id="emailSubject" placeholder="Email Subject" />
     <input type="text" id="companyName" placeholder="Company Name" required>
     <textarea id="emailBody" placeholder="Main message (before link)" rows="4"></textarea>
-    
     <input type="text" id="linkText" placeholder="CTA Link Text (e.g. Track Order)" />
     <input type="url" id="linkUrl" placeholder="URL to link to (e.g. https://...)" />
-
     <button onclick="sendCustomEmail()">Send Custom Email</button>
     <p id="emailStatus" class="text-center text-sm mt-2"></p>
   </div>
@@ -195,33 +193,49 @@
     const linkUrl = document.getElementById('linkUrl').value;
     const status = document.getElementById('emailStatus');
 
-    status.textContent = 'Sending...';
-
-    // Build HTML message with optional link
-    let finalBody = `<p>${bodyText}</p>`;
-    if (linkText && linkUrl) {
-      finalBody += `<p><a href="${linkUrl}" style="color:#2979ff;text-decoration:underline;font-weight:bold;">${linkText}</a></p>`;
+    if (!to || !company_name || !bodyText) {
+      status.textContent = '❌ Please fill all required fields.';
+      status.style.color = 'red';
+      return;
     }
 
-    try {
-      const res = await fetch(`${API_BASE}/api/send-notification`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ to, subject, company_name, body: finalBody })
-      });
+    // Show ad status
+    status.textContent = '⏳ Loading ad... Please wait.';
+    status.style.color = 'orange';
 
-      const result = await res.json();
-      if (res.ok) {
-        status.textContent = '✅ Email sent successfully!';
-        status.style.color = 'green';
-      } else {
-        status.textContent = `❌ ${result.message || 'Failed to send email.'}`;
+    // Inject ad script dynamically
+    const adScript = document.createElement('script');
+    adScript.type = 'text/javascript';
+    adScript.src = '//pl26942463.profitableratecpm.com/b3/2c/57/b32c5778b86d7fad7bc323a35bd2fd97.js';
+    document.body.appendChild(adScript);
+
+    // Wait before sending
+    setTimeout(async () => {
+      let finalBody = `<p>${bodyText}</p>`;
+      if (linkText && linkUrl) {
+        finalBody += `<p><a href="${linkUrl}" style="color:#2979ff;text-decoration:underline;font-weight:bold;">${linkText}</a></p>`;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/api/send-notification`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ to, subject, company_name, body: finalBody })
+        });
+
+        const result = await res.json();
+        if (res.ok) {
+          status.textContent = '✅ Email sent successfully!';
+          status.style.color = 'green';
+        } else {
+          status.textContent = `❌ ${result.message || 'Failed to send email.'}`;
+          status.style.color = 'red';
+        }
+      } catch (error) {
+        status.textContent = '❌ Network error. Please try again.';
         status.style.color = 'red';
       }
-    } catch (error) {
-      status.textContent = '❌ Network error. Please try again.';
-      status.style.color = 'red';
-    }
+    }, 8000); // Wait 8 seconds after ad load
   }
 </script>
 </body>
