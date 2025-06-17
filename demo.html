@@ -210,6 +210,7 @@
 </div>
 
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>
   AOS.init();
   const API_BASE = 'https://rocket-7t34.onrender.com';
@@ -221,7 +222,7 @@
     const lastSeen = localStorage.getItem(AD_KEY);
     if (!lastSeen) return false;
     const lastSeenTime = parseInt(lastSeen, 10);
-    return (Date.now() - lastSeenTime) < 86400000; // 24h
+    return (Date.now() - lastSeenTime) < 86400000; // 24 hours
   }
 
   async function sendDelayedEmail() {
@@ -252,10 +253,31 @@
     document.getElementById('adPopup').style.display = 'flex';
     document.getElementById('continueBtn').style.display = 'none';
     document.getElementById('countdown').textContent = `Please wait ${AD_DELAY_SECONDS} seconds...`;
+    startCountdown();
   }
 
   function closeAdPopup() {
     document.getElementById('adPopup').style.display = 'none';
+  }
+
+  function startCountdown() {
+    let seconds = AD_DELAY_SECONDS;
+    const countdownElem = document.getElementById('countdown');
+    const continueBtn = document.getElementById('continueBtn');
+    continueBtn.disabled = true;
+    continueBtn.style.display = 'none';
+
+    const countdown = setInterval(() => {
+      seconds--;
+      if (seconds > 0) {
+        countdownElem.textContent = `Please wait ${seconds} seconds...`;
+      } else {
+        clearInterval(countdown);
+        countdownElem.textContent = '✅ You may now continue.';
+        continueBtn.disabled = false;
+        continueBtn.style.display = 'inline-block';
+      }
+    }, 1000);
   }
 
   async function sendCustomEmail() {
@@ -285,24 +307,9 @@
       status.style.color = 'orange';
       await sendDelayedEmail();
     } else {
-      openAdPopup();
-      status.textContent = '⏳ Please wait for the ad...';
+      status.textContent = '⏳ Ad required. Please wait...';
       status.style.color = 'orange';
-      let seconds = AD_DELAY_SECONDS;
-      const countdownElem = document.getElementById('countdown');
-      const continueBtn = document.getElementById('continueBtn');
-      continueBtn.style.display = 'none';
-
-      const countdown = setInterval(() => {
-        seconds--;
-        if (seconds > 0) {
-          countdownElem.textContent = `Please wait ${seconds} seconds...`;
-        } else {
-          clearInterval(countdown);
-          countdownElem.textContent = 'You may now continue.';
-          continueBtn.style.display = 'inline-block';
-        }
-      }, 1000);
+      openAdPopup();
     }
   }
 
