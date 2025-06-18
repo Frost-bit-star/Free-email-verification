@@ -1,20 +1,24 @@
-name: Keep Server Awake
+name: Ping Load Balancer
 
 on:
   schedule:
-    - cron: "*/2 * * * *"  # ⏰ Every 5 minutes
+    - cron: '*/2 * * * *'  # Every 5 minutes
+  workflow_dispatch:
 
 jobs:
-  ping-server:
+  ping:
     runs-on: ubuntu-latest
-
     steps:
-      - name: 🛰️ Ping health endpoint and validate response
+      - name: Curl Ping to Load Balancer
         run: |
-          echo "Pinging health check..."
-          RESPONSE=$(curl -s https://rockets-nfcf.onrender.com/health)
-          echo "Response: $RESPONSE"
-          echo "$RESPONSE" | grep -q '"status":"ok"' || {
-            echo "❌ Health check failed: Service not fully healthy."
+          echo "Pinging rockets-nfcf load balancer..."
+          curl -s -o /dev/null -w "%{http_code}" https://rockets-nfcf.onrender.com/health | tee result.txt
+
+          STATUS_CODE=$(cat result.txt)
+
+          if [ "$STATUS_CODE" -ne 200 ]; then
+            echo "::error::🚨 Load balancer not responding correctly. Status code: $STATUS_CODE"
             exit 1
-          }
+          else
+            echo "✅ Load balancer is healthy (HTTP $STATUS_CODE)"
+          fi

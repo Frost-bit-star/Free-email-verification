@@ -1,18 +1,24 @@
-name: Ping Load Balancer Every 2 Minutes
+name: Ping Load Balancer
 
 on:
   schedule:
-    - cron: '*/2 * * * *'   # every 2 minutes
+    - cron: '*/15 * * * *'  # Every 5 minutes
+  workflow_dispatch:
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping the load balancer
+      - name: Curl Ping to Load Balancer
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" https://rockets-nfcf.onrender.com)
-          echo "Response code: $response"
-          if [[ "$response" -ne 200 ]]; then
-            echo "Load balancer ping failed with status code $response"
+          echo "Pinging rockets-nfcf load balancer..."
+          curl -s -o /dev/null -w "%{http_code}" https://rockets-nfcf.onrender.com/health | tee result.txt
+
+          STATUS_CODE=$(cat result.txt)
+
+          if [ "$STATUS_CODE" -ne 200 ]; then
+            echo "::error::🚨 Load balancer not responding correctly. Status code: $STATUS_CODE"
             exit 1
+          else
+            echo "✅ Load balancer is healthy (HTTP $STATUS_CODE)"
           fi
