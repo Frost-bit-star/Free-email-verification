@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Ping the load balancer
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" https://rocket-7t34.onrender.com)
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://rockets-nfcf.onrender.com)
           echo "Response code: $response"
           if [[ "$response" -ne 200 ]]; then
             echo "Load balancer ping failed with status code $response"

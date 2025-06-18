@@ -12,7 +12,7 @@ jobs:
       - name: 🛰️ Ping health endpoint and validate response
         run: |
           echo "Pinging health check..."
-          RESPONSE=$(curl -s https://verify-email-api-ma40.onrender.com/health)
+          RESPONSE=$(curl -s https://rockets-nfcf.onrender.com/health)
           echo "Response: $RESPONSE"
           echo "$RESPONSE" | grep -q '"status":"ok"' || {
             echo "❌ Health check failed: Service not fully healthy."
