@@ -2,23 +2,33 @@ name: Ping Load Balancer
 
 on:
   schedule:
-    - cron: '*/2 * * * *'  # Every 5 minutes
+    - cron: '*/2 * * * *'  # Every 2 minutes
   workflow_dispatch:
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Curl Ping to Load Balancer
+      - name: Curl Ping to Load Balancer with Retry
         run: |
-          echo "Pinging rockets-nfcf load balancer..."
-          curl -s -o /dev/null -w "%{http_code}" https://rockets-nfcf.onrender.com/health | tee result.txt
+          echo "🔄 Pinging rockets-nfcf load balancer with retry logic..."
 
-          STATUS_CODE=$(cat result.txt)
+          RETRIES=3
+          DELAY=5
+          URL="https://rockets-nfcf.onrender.com/health"
 
-          if [ "$STATUS_CODE" -ne 200 ]; then
-            echo "::error::🚨 Load balancer not responding correctly. Status code: $STATUS_CODE"
-            exit 1
-          else
-            echo "✅ Load balancer is healthy (HTTP $STATUS_CODE)"
-          fi
+          for i in $(seq 1 $RETRIES); do
+            STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
+            STATUS_CODE=$(echo "$STATUS_CODE" | tr -d '[:space:]')
+
+            if [ "$STATUS_CODE" -eq 200 ]; then
+              echo "✅ Load balancer is healthy (HTTP $STATUS_CODE)"
+              exit 0
+            else
+              echo "❌ Attempt $i failed with HTTP $STATUS_CODE. Retrying in ${DELAY}s..."
+              sleep $DELAY
+            fi
+          done
+
+          echo "::error::🚨 Load balancer failed after $RETRIES attempts. Last status: $STATUS_CODE"
+          exit 1
