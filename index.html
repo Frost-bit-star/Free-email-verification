@@ -45,8 +45,8 @@
         <!-- Dropdown Items -->
         <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-44 sm:w-48 bg-white/90 backdrop-blur-md rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
           <div class="py-1">
-            <a href="login.html" class="block px-4 py-2 text-sm text-gray-800 hover:bg-blue-100">Login</a>
-            <a href="signup.html" class="block px-4 py-2 text-sm text-gray-800 hover:bg-blue-100">Sign Up</a>
+            <a href="https://stackverify.my-board.org/signin.php" class="block px-4 py-2 text-sm text-gray-800 hover:bg-blue-100">Login</a>
+            <a href="https://stackverify.my-board.org/index.php" class="block px-4 py-2 text-sm text-gray-800 hover:bg-blue-100">Sign Up</a>
             <a href="about.html" class="block px-4 py-2 text-sm text-gray-800 hover:bg-blue-100">About Us</a>
             <a href="contact.html" class="block px-4 py-2 text-sm text-gray-800 hover:bg-blue-100">Contact Us</a>
           </div>
@@ -65,42 +65,75 @@
     <div class="relative z-10 max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-16">
       
       <!-- Text Content -->
-      <div class="md:w-1/2 text-center md:text-left" data-aos="fade-right">
-        <h1 class="text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
-          Verify & Connect <span class="text-blue-600">Users Instantly</span>
-        </h1>
-        <p class="text-lg text-gray-700 mb-6">
-          StackVerify lets you <span class="font-semibold">validate emails, phone numbers, and WhatsApp contacts</span>, send custom newsletters, and prevent fraud — all from one smart dashboard.
-        </p>
-        <ul class="text-gray-800 mb-6 space-y-2 text-sm md:text-base">
-          <li>✅ Real-Time Email & SMS Validation</li>
-          <li>✅ Bulk WhatsApp & Newsletter Campaigns</li>
-          <li>✅ GDPR-Compliant & Secure API</li>
-          <li>✅ Instant User Access Dashboard</li>
-        </ul>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-          <a href="demo.html" class="bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 transition transform hover:scale-105">
-            Try Free Demo
-          </a>
-          <a href="#features" class="text-blue-700 font-medium hover:underline hover:text-blue-900 transition">
-            Explore Features ↓
-          </a>
-        </div>
+      <section id="features" class="py-20 relative z-10">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
+    
+    <!-- Text & Icons -->
+    <div class="md:w-1/2 text-center md:text-left" data-aos="fade-right">
+      <h1 class="text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+        Verify & Connect <span class="text-blue-600">Users Instantly</span>
+      </h1>
+      <p class="text-lg text-gray-700 mb-6">
+        StackVerify lets you <span class="font-semibold">validate emails, phone numbers, and WhatsApp contacts</span>, send custom newsletters, and prevent fraud — all from one smart dashboard.
+      </p>
+
+      <ul class="text-gray-800 mb-6 space-y-4 text-sm md:text-base">
+        <li class="flex items-start gap-3">
+          <svg class="w-5 h-5 mt-1 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+          Real-Time Email & SMS Validation
+        </li>
+
+        <li class="flex items-start gap-3">
+          <svg class="w-5 h-5 mt-1 text-green-600" viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16.003 3C9.38 3 4 8.376 4 15c0 2.678.875 5.162 2.36 7.198L4 29l7.008-2.31C12.973 27.564 14.45 28 16.003 28c6.622 0 12-5.376 12-12S22.625 3 16.003 3zm-.004 22.5c-1.37 0-2.693-.333-3.867-.963l-.276-.147-4.155 1.37 1.357-4.043-.18-.291C7.97 19.3 7.5 17.703 7.5 16c0-4.693 3.81-8.5 8.5-8.5S24.5 11.308 24.5 16c0 4.692-3.81 8.5-8.501 8.5z"/>
+            <path d="M20.438 18.188l-2.094-.604c-.276-.083-.573 0-.792.208l-.646.625c-.875-.438-3.5-2.563-3.875-3.625l.688-.688c.219-.22.292-.52.208-.792l-.604-2.094a.739.739 0 00-.729-.521c-.5 0-1.063.23-1.063 1.083 0 2.125 3.438 5.063 4.25 5.438.813.376 1.344.5 1.813.5.855 0 1.083-.563 1.083-1.063a.74.74 0 00-.52-.729z"/>
+          </svg>
+          Bulk WhatsApp & Newsletter Campaigns
+        </li>
+
+        <li class="flex items-start gap-3">
+          <svg class="w-5 h-5 mt-1 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          GDPR-Compliant & Secure API
+        </li>
+
+        <li class="flex items-start gap-3">
+          <svg class="w-5 h-5 mt-1 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M3 13h8V3H3v10zm10 8h8v-6h-8v6zM3 21h8v-6H3v6zm10-8h8V3h-8v10z"/>
+          </svg>
+          Instant User Access Dashboard
+        </li>
+      </ul>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+        <a href="demo.html" class="bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 transition transform hover:scale-105">
+          Try Free Demo
+        </a>
+        <a href="#features" class="text-blue-700 font-medium hover:underline hover:text-blue-900 transition">
+          Explore Features ↓
+        </a>
       </div>
     </div>
-  </section>
-    <!-- Visual Lottie Animation -->
-    <div class="md:w-1/2 flex justify-center items-center" data-aos="fade-left">
-      <div class="bg-white/40 backdrop-blur-2xl p-6 rounded-3xl shadow-2xl">
-        <lottie-player 
-          src="https://assets9.lottiefiles.com/private_files/lf30_jrpzvtqz.json" 
-          background="transparent" speed="1" 
-          style="width: 100%; max-width: 400px; height: auto;" 
-          loop autoplay>
-        </lottie-player>
-      </div>
+
+    <!-- Optional Lottie or Image -->
+    <div class="md:w-1/2" data-aos="fade-left">
+      <lottie-player
+        src="https://assets6.lottiefiles.com/packages/lf20_puciaact.json"
+        background="transparent"
+        speed="1"
+        loop
+        autoplay
+        class="w-full max-w-md mx-auto">
+      </lottie-player>
     </div>
   </div>
+</section>
 
   <!-- Lottie Player Script -->
   <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
@@ -253,7 +286,7 @@
       <h3 class="text-xl font-semibold text-gray-700 mb-2">📤 Request Code (JavaScript - fetch)</h3>
       <div class="relative">
         <textarea id="fetchRequestCode" readonly class="w-full h-56 bg-gray-900 text-green-200 font-mono text-sm rounded-lg p-4 resize-none focus:outline-none">
-fetch("https://rockets-nfcf.onrender.com/request-code", {
+fetch("https://rocketverify.onrender.com/request-code", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
@@ -277,7 +310,7 @@ fetch("https://rockets-nfcf.onrender.com/request-code", {
       <h3 class="text-xl font-semibold text-gray-700 mb-2">📤 Request Code (cURL)</h3>
       <div class="relative">
         <textarea id="curlRequestCode" readonly class="w-full h-56 bg-gray-900 text-green-200 font-mono text-sm rounded-lg p-4 resize-none focus:outline-none">
-curl -X POST https://rockets-nfcf.onrender.com/request-code \
+curl -X POST https://rocketverify.onrender.com/request-code \
   -H "Content-Type: application/json" \
   -d '{
     "company": "MyCompany",
@@ -294,7 +327,7 @@ curl -X POST https://rockets-nfcf.onrender.com/request-code \
       <h3 class="text-xl font-semibold text-gray-700 mb-2">✅ Verify Code (JavaScript - fetch)</h3>
       <div class="relative">
         <textarea id="fetchVerifyCode" readonly class="w-full h-48 bg-gray-900 text-green-200 font-mono text-sm rounded-lg p-4 resize-none focus:outline-none">
-fetch("https://rockets-nfcf.onrender.com/verify-code", {
+fetch("https://rocketverify.onrender.com/verify-code", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
@@ -317,7 +350,7 @@ fetch("https://rockets-nfcf.onrender.com/verify-code", {
       <h3 class="text-xl font-semibold text-gray-700 mb-2">✅ Verify Code (cURL)</h3>
       <div class="relative">
         <textarea id="curlVerifyCode" readonly class="w-full h-48 bg-gray-900 text-green-200 font-mono text-sm rounded-lg p-4 resize-none focus:outline-none">
-curl -X POST https://rockets-nfcf.onrender.com/verify-code \
+curl -X POST https://rocketverify.onrender.com/verify-code \
   -H "Content-Type: application/json" \
   -d '{
     "email": "john@example.com",
