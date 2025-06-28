@@ -1,296 +1,202 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Email Verification & Custom Sender</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stackverify Email API Playground</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AOS for scroll animations -->
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+
   <style>
-    * { box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 2rem;
-      background: linear-gradient(135deg, #e0f7fa, #ffffff);
-      color: #333;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      font-size: 2.5rem;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #e0e7ff, #f3f4f6);
     }
     .glass {
-      max-width: 600px;
-      margin: 2rem auto;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 1rem;
       padding: 2rem;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      transition: transform 0.3s ease;
-      position: relative;
+      margin-bottom: 2rem;
     }
-    .glass:hover {
-      transform: scale(1.01);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    }
-    form, .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    input, textarea, button {
-      padding: 0.75rem;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      outline: none;
-    }
-    textarea {
-      resize: vertical;
-    }
-    button {
-      background: #2979ff;
-      color: white;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background: #1c5fd0;
-    }
-    pre {
-      background: #eceff1;
+    pre, #liveLogs {
+      background: rgba(0, 0, 0, 0.7);
+      color: #00ff90;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
       padding: 1rem;
-      border-radius: 10px;
-      white-space: pre-wrap;
-    }
-    .status-ok { color: green; font-weight: bold; }
-    .status-error { color: red; font-weight: bold; }
-    .back-btn {
-      display: inline-block;
-      margin-bottom: 1.5rem;
-      padding: 0.6rem 1.2rem;
-      border-radius: 10px;
-      background: #fff;
-      color: #2979ff;
-      text-decoration: none;
-      font-weight: bold;
-      border: 2px solid #2979ff;
-      transition: background 0.3s ease, color 0.3s ease;
-    }
-    .back-btn:hover {
-      background: #2979ff;
-      color: #fff;
-    }
-
-    #adPopup {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(5px);
-    }
-    #adContent {
-      background: white;
-      width: 340px;
-      max-width: 90vw;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 4px 30px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-    }
-    #adRotator {
-      width: 300px;
-      height: 250px;
-      margin-bottom: 15px;
-    }
-    #countdown {
-      font-weight: bold;
-      margin-bottom: 10px;
-      font-size: 1.2rem;
-      color: #333;
-      text-align: center;
-    }
-    #continueBtn {
-      background: #2979ff;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 20px;
-      font-weight: bold;
-      cursor: pointer;
-      display: none;
-      transition: background 0.3s ease;
-    }
-    #continueBtn:hover {
-      background: #1c5fd0;
-    }
-    #closeAdBtn {
-      position: absolute;
-      top: 8px;
-      right: 12px;
-      background: transparent;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: #999;
-      transition: color 0.3s ease;
-    }
-    #closeAdBtn:hover {
-      color: #555;
+      border-radius: 0.5rem;
+      height: 200px;
+      overflow-y: auto;
     }
   </style>
 </head>
-<body>
 
-<a href="index.html" class="back-btn">← Back to Home</a>
+<body class="text-gray-800">
 
-<h1 data-aos="fade-down">📧 Email API Playground</h1>
-
-<section class="glass" data-aos="fade-up">
-  <h2>Request Verification Code</h2>
-  <form id="requestForm">
-    <input type="text" name="company" placeholder="Company" required>
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <button type="submit">Send Code</button>
-  </form>
-  <pre id="requestResult"></pre>
-</section>
-
-<section class="glass" data-aos="fade-up" data-aos-delay="100">
-  <h2>Verify Code</h2>
-  <form id="verifyForm">
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="text" name="code" placeholder="Code (e.g. 1A2B3C)" required>
-    <button type="submit">Verify</button>
-  </form>
-  <pre id="verifyResult"></pre>
-</section>
-
-<section class="glass" data-aos="fade-up" data-aos-delay="200">
-  <h2>Send Custom Email</h2>
-  <div class="form-group">
-    <input type="email" id="emailTo" placeholder="Recipient Email" required>
-    <input type="text" id="emailSubject" placeholder="Email Subject" />
-    <input type="text" id="companyName" placeholder="Company Name" required>
-    <textarea id="emailBody" placeholder="Main message (before link)" rows="4"></textarea>
-    <input type="text" id="linkText" placeholder="CTA Link Text (e.g. Track Order)" />
-    <input type="url" id="linkUrl" placeholder="URL to link to (e.g. https://...)" />
-    <button id="sendEmailBtn">Send Custom Email</button>
-    <p id="emailStatus" class="text-center text-sm mt-2"></p>
+<!-- Header -->
+<header class="bg-gradient-to-r from-blue-800 to-indigo-900 p-5 text-white flex justify-between items-center shadow-lg">
+  <h1 class="text-2xl font-bold"><a href="#">Stackverify</a></h1>
+  <nav class="space-x-6 hidden md:flex font-semibold">
+    <a href="#" class="hover:text-gray-300">API</a>
+    <a href="#" class="hover:text-gray-300">Docs</a>
+    <a href="#" class="hover:text-gray-300">Pricing</a>
+    <a href="#" class="hover:text-gray-300">Login</a>
+    <a href="#" class="bg-white text-blue-800 px-4 py-2 rounded shadow hover:bg-gray-100 transition">Sign Up</a>
+  </nav>
+  <div class="md:hidden">
+    <button id="menuBtn" class="focus:outline-none">
+      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
+      </svg>
+    </button>
   </div>
-</section>
+</header>
 
-<section class="glass" data-aos="fade-up" data-aos-delay="300">
-  <h2>Email Server Health</h2>
-  <div id="healthStatus">Checking...</div>
-</section>
+<!-- Mobile menu -->
+<div id="mobileMenu" class="hidden bg-white shadow-lg px-6 py-4 space-y-4 md:hidden">
+  <a href="#" class="block text-blue-800 font-semibold">API</a>
+  <a href="#" class="block text-blue-800 font-semibold">Docs</a>
+  <a href="#" class="block text-blue-800 font-semibold">Pricing</a>
+  <a href="#" class="block text-blue-800 font-semibold">Login</a>
+  <a href="#" class="block bg-blue-800 text-white text-center py-2 rounded shadow">Sign Up</a>
+</div>
 
-<!-- Ad Popup -->
-<div id="adPopup" aria-modal="true" role="dialog" aria-labelledby="adTitle" tabindex="-1">
-  <div id="adContent">
-    <button id="closeAdBtn" aria-label="Close Ad Popup">&times;</button>
-    <h3 id="adTitle">Sponsored Ad</h3>
-    <div id="adRotator"></div>
-    <div id="countdown">Please wait 8 seconds...</div>
-    <button id="continueBtn">Continue to Send Email</button>
+<!-- Carousel logos -->
+<div class="bg-white py-4 shadow-inner">
+  <div class="flex items-center justify-center space-x-8 overflow-x-auto animate-pulse px-4">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Mailchimp_Logo.png/320px-Mailchimp_Logo.png" alt="Mailchimp" class="h-8">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/SendGrid_Logo_2016.svg/320px-SendGrid_Logo_2016.svg.png" alt="SendGrid" class="h-8">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Amazon_Web_Services_Logo.svg/320px-Amazon_Web_Services_Logo.svg.png" alt="AWS" class="h-8">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Google_Cloud_logo.svg/320px-Google_Cloud_logo.svg.png" alt="Google Cloud" class="h-8">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Heroku_logo.svg/320px-Heroku_logo.svg.png" alt="Heroku" class="h-8">
   </div>
 </div>
+
+<!-- Main content -->
+<main class="max-w-4xl mx-auto px-4 py-12">
+
+  <h2 class="text-4xl font-extrabold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600" data-aos="fade-down">📧 Email API Playground</h2>
+
+  <section class="glass" data-aos="fade-up">
+    <h3 class="text-2xl font-bold mb-4">Request Verification Code</h3>
+    <form id="requestForm" class="space-y-4">
+      <input type="text" name="company" placeholder="Company" required class="w-full p-3 rounded border border-gray-300 outline-none">
+      <input type="text" name="username" placeholder="Username" required class="w-full p-3 rounded border border-gray-300 outline-none">
+      <input type="email" name="email" placeholder="Email" required class="w-full p-3 rounded border border-gray-300 outline-none">
+      <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition">Send Code</button>
+    </form>
+    <pre id="requestResult"></pre>
+  </section>
+
+  <section class="glass" data-aos="fade-up" data-aos-delay="100">
+    <h3 class="text-2xl font-bold mb-4">Verify Code</h3>
+    <form id="verifyForm" class="space-y-4">
+      <input type="email" name="email" placeholder="Email" required class="w-full p-3 rounded border border-gray-300 outline-none">
+      <input type="text" name="code" placeholder="Code (e.g. 1A2B3C)" required class="w-full p-3 rounded border border-gray-300 outline-none">
+      <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 rounded hover:bg-green-700 transition">Verify</button>
+    </form>
+    <pre id="verifyResult"></pre>
+  </section>
+
+  <section class="glass" data-aos="fade-up" data-aos-delay="200">
+    <h3 class="text-2xl font-bold mb-4">Send Custom Email</h3>
+    <div class="space-y-4">
+      <input type="email" id="emailTo" placeholder="Recipient Email" required class="w-full p-3 rounded border border-gray-300 outline-none">
+      <input type="text" id="emailSubject" placeholder="Email Subject" class="w-full p-3 rounded border border-gray-300 outline-none">
+      <input type="text" id="companyName" placeholder="Company Name" required class="w-full p-3 rounded border border-gray-300 outline-none">
+      <textarea id="emailBody" placeholder="Main message (before link)" rows="4" class="w-full p-3 rounded border border-gray-300 outline-none"></textarea>
+      <input type="text" id="linkText" placeholder="CTA Link Text (e.g. Track Order)" class="w-full p-3 rounded border border-gray-300 outline-none">
+      <input type="url" id="linkUrl" placeholder="URL to link to (e.g. https://...)" class="w-full p-3 rounded border border-gray-300 outline-none">
+      <button id="sendEmailBtn" class="w-full bg-purple-600 text-white font-bold py-3 rounded hover:bg-purple-700 transition">Send Custom Email</button>
+      <p id="emailStatus" class="text-center text-sm mt-2"></p>
+    </div>
+  </section>
+
+  <section class="glass" data-aos="fade-up" data-aos-delay="300">
+    <h3 class="text-2xl font-bold mb-4">Email Server Health</h3>
+    <div id="healthStatus">Checking...</div>
+  </section>
+
+  <section class="glass" data-aos="fade-up" data-aos-delay="400">
+    <h3 class="text-2xl font-bold mb-4">Live Execution Logs</h3>
+    <div id="liveLogs"></div>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-indigo-900 text-white text-center py-4 mt-12">
+  &copy; 2025 Stackverify Developers Hub
+</footer>
 
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>
   AOS.init();
 
   const API_BASE = 'https://rocketverify.onrender.com';
-  const AD_KEY = 'lastAdSeenTimestamp';
-  const AD_DELAY_SECONDS = 8;
-  let emailPayload = null;
+  const liveLogs = document.getElementById('liveLogs');
 
-  // Rotate ads inside #adRotator div
-  function rotateAds() {
-    const adRotator = document.getElementById('adRotator');
-    let toggle = true;
-
-    function showNextAd() {
-      adRotator.innerHTML = '';
-      if (toggle) {
-        // Script ad
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = '//pl26942463.profitableratecpm.com/b3/2c/57/b32c5778b86d7fad7bc323a35bd2fd97.js';
-        adRotator.appendChild(script);
-      } else {
-        // Iframe ad
-        const iframe = document.createElement('iframe');
-        iframe.src = 'https://www.profitableratecpm.com/wugcxed85?key=8c89055f25c555d17c05052fc6f35f03';
-        iframe.width = '300';
-        iframe.height = '250';
-        iframe.style.border = 'none';
-        adRotator.appendChild(iframe);
-      }
-      toggle = !toggle;
-    }
-
-    showNextAd();
-    return setInterval(showNextAd, 8000);
+  function addLog(message) {
+    const time = new Date().toLocaleTimeString();
+    liveLogs.innerHTML += `[${time}] ${message}<br>`;
+    liveLogs.scrollTop = liveLogs.scrollHeight;
   }
 
-  function hasSeenAdToday() {
-    const lastSeen = localStorage.getItem(AD_KEY);
-    if (!lastSeen) return false;
-    const lastSeenTime = parseInt(lastSeen, 10);
-    return (Date.now() - lastSeenTime) < 86400000; // 24h
-  }
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    const menu = document.getElementById('mobileMenu');
+    menu.classList.toggle('hidden');
+  });
 
-  async function sendDelayedEmail() {
-    const status = document.getElementById('emailStatus');
-    try {
-      const res = await fetch(`${API_BASE}/api/send-notification`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(emailPayload)
-      });
-      const result = await res.json();
-      if (res.ok) {
-        status.textContent = '✅ Email sent successfully!';
-        status.style.color = 'green';
-        localStorage.setItem(AD_KEY, Date.now().toString());
-      } else {
-        status.textContent = `❌ ${result.message || 'Failed to send email.'}`;
-        status.style.color = 'red';
-      }
-    } catch (error) {
-      status.textContent = '❌ Network error. Please try again.';
-      status.style.color = 'red';
-    }
-    closeAdPopup();
-  }
+  document.getElementById('requestForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const payload = {
+      company: form.company.value,
+      username: form.username.value,
+      email: form.email.value
+    };
+    addLog('Sending request for verification code...');
+    const res = await fetch(`${API_BASE}/request-code`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    document.getElementById('requestResult').textContent = JSON.stringify(data, null, 2);
+    addLog('Received verification code response.');
+  });
 
-  function openAdPopup() {
-    document.getElementById('adPopup').style.display = 'flex';
-    document.getElementById('continueBtn').style.display = 'none';
-    document.getElementById('countdown').textContent = `Please wait ${AD_DELAY_SECONDS} seconds...`;
-    rotateAds(); // start ad rotation when popup opens
-  }
+  document.getElementById('verifyForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const payload = {
+      email: form.email.value,
+      code: form.code.value
+    };
+    addLog('Verifying code...');
+    const res = await fetch(`${API_BASE}/verify-code`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    document.getElementById('verifyResult').textContent = JSON.stringify(data, null, 2);
+    addLog('Code verification completed.');
+  });
 
-  function closeAdPopup() {
-    document.getElementById('adPopup').style.display = 'none';
-    clearInterval(window.adRotationInterval);
-  }
-
-  async function sendCustomEmail() {
+  document.getElementById('sendEmailBtn').addEventListener('click', async (e) => {
+    e.preventDefault();
     const to = document.getElementById('emailTo').value.trim();
     const subject = document.getElementById('emailSubject').value.trim() || "Notification";
     const company_name = document.getElementById('companyName').value.trim();
@@ -310,98 +216,44 @@
       finalBody += `<p><a href="${linkUrl}" style="color:#2979ff;text-decoration:underline;font-weight:bold;">${linkText}</a></p>`;
     }
 
-    emailPayload = { to, subject, company_name, body: finalBody };
-
-    if (hasSeenAdToday()) {
-      status.textContent = '⏳ Sending email...';
-      status.style.color = 'orange';
-      await sendDelayedEmail();
-    } else {
-      openAdPopup();
-      status.textContent = '⏳ Please wait for the ad...';
-      status.style.color = 'orange';
-      let seconds = AD_DELAY_SECONDS;
-      const countdownElem = document.getElementById('countdown');
-      const continueBtn = document.getElementById('continueBtn');
-      continueBtn.style.display = 'none';
-
-      if(window.adRotationInterval) clearInterval(window.adRotationInterval);
-      window.adRotationInterval = rotateAds();
-
-      const countdown = setInterval(() => {
-        seconds--;
-        if (seconds > 0) {
-          countdownElem.textContent = `Please wait ${seconds} seconds...`;
-        } else {
-          clearInterval(countdown);
-          countdownElem.textContent = 'You may now continue.';
-          continueBtn.style.display = 'inline-block';
-          clearInterval(window.adRotationInterval);
-        }
-      }, 1000);
-    }
-  }
-
-  document.getElementById('sendEmailBtn').addEventListener('click', (e) => {
-    e.preventDefault();
-    sendCustomEmail();
-  });
-
-  document.getElementById('continueBtn').addEventListener('click', async () => {
-    const status = document.getElementById('emailStatus');
+    const payload = { to, subject, company_name, body: finalBody };
     status.textContent = '⏳ Sending email...';
     status.style.color = 'orange';
-    await sendDelayedEmail();
-  });
+    addLog('Sending custom email...');
 
-  document.getElementById('closeAdBtn').addEventListener('click', () => {
-    closeAdPopup();
-    const status = document.getElementById('emailStatus');
-    status.textContent = '⚠️ You cancelled the ad. Email not sent.';
-    status.style.color = 'red';
-  });
-
-  document.getElementById('requestForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const payload = {
-      company: form.company.value,
-      username: form.username.value,
-      email: form.email.value
-    };
-    const res = await fetch(`${API_BASE}/request-code`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    document.getElementById('requestResult').textContent = JSON.stringify(data, null, 2);
-  });
-
-  document.getElementById('verifyForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const payload = {
-      email: form.email.value,
-      code: form.code.value
-    };
-    const res = await fetch(`${API_BASE}/verify-code`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    document.getElementById('verifyResult').textContent = JSON.stringify(data, null, 2);
+    try {
+      const res = await fetch(`${API_BASE}/api/send-notification`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json();
+      if (res.ok) {
+        status.textContent = '✅ Email sent successfully!';
+        status.style.color = 'green';
+        addLog('Custom email sent successfully.');
+      } else {
+        status.textContent = `❌ ${result.message || 'Failed to send email.'}`;
+        status.style.color = 'red';
+        addLog('Failed to send custom email.');
+      }
+    } catch (error) {
+      status.textContent = '❌ Network error. Please try again.';
+      status.style.color = 'red';
+      addLog('Network error while sending custom email.');
+    }
   });
 
   async function checkHealth() {
     try {
       const res = await fetch(`${API_BASE}/health`);
       document.getElementById('healthStatus').innerHTML = res.ok
-        ? '<span class="status-ok">✅ Server is Online</span>'
-        : '<span class="status-error">❌ Server Health Check Failed</span>';
+        ? '<span class="text-green-600 font-bold">✅ Server is Online</span>'
+        : '<span class="text-red-600 font-bold">❌ Server Health Check Failed</span>';
+      addLog('Checked server health.');
     } catch (err) {
-      document.getElementById('healthStatus').innerHTML = '<span class="status-error">❌ Server Offline</span>';
+      document.getElementById('healthStatus').innerHTML = '<span class="text-red-600 font-bold">❌ Server Offline</span>';
+      addLog('Server health check failed.');
     }
   }
 
