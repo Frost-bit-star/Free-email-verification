@@ -38,6 +38,18 @@
       border-radius: 0.5rem;
       height: 200px;
       overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .icon {
+      display: inline-block;
+      vertical-align: middle;
+      width: 1.3em;
+      height: 1.3em;
+      margin-right: 0.25em;
+      stroke-width: 2;
+      stroke: currentColor;
+      fill: none;
     }
   </style>
 </head>
@@ -55,8 +67,8 @@
     <a href="#" class="bg-white text-blue-800 px-4 py-2 rounded shadow hover:bg-gray-100 transition">Sign Up</a>
   </nav>
   <div class="md:hidden">
-    <button id="menuBtn" class="focus:outline-none">
-      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <button id="menuBtn" class="focus:outline-none" aria-label="Toggle menu">
+      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
       </svg>
     </button>
@@ -64,73 +76,101 @@
 </header>
 
 <!-- Mobile menu -->
-<div id="mobileMenu" class="hidden bg-white shadow-lg px-6 py-4 space-y-4 md:hidden">
-  <a href="#" class="block text-blue-800 font-semibold">API</a>
-  <a href="#" class="block text-blue-800 font-semibold">Docs</a>
-  <a href="#" class="block text-blue-800 font-semibold">Pricing</a>
-  <a href="#" class="block text-blue-800 font-semibold">Login</a>
-  <a href="#" class="block bg-blue-800 text-white text-center py-2 rounded shadow">Sign Up</a>
+<div id="mobileMenu" class="hidden bg-white shadow-lg px-6 py-4 space-y-4 md:hidden" role="menu">
+  <a href="#" class="block text-blue-800 font-semibold" role="menuitem">API</a>
+  <a href="#" class="block text-blue-800 font-semibold" role="menuitem">Docs</a>
+  <a href="#" class="block text-blue-800 font-semibold" role="menuitem">Pricing</a>
+  <a href="#" class="block text-blue-800 font-semibold" role="menuitem">Login</a>
+  <a href="#" class="block bg-blue-800 text-white text-center py-2 rounded shadow" role="menuitem">Sign Up</a>
 </div>
 
 <!-- Carousel logos -->
 <div class="bg-white py-4 shadow-inner">
   <div class="flex items-center justify-center space-x-8 overflow-x-auto animate-pulse px-4">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Mailchimp_Logo.png/320px-Mailchimp_Logo.png" alt="Mailchimp" class="h-8">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/SendGrid_Logo_2016.svg/320px-SendGrid_Logo_2016.svg.png" alt="SendGrid" class="h-8">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Amazon_Web_Services_Logo.svg/320px-Amazon_Web_Services_Logo.svg.png" alt="AWS" class="h-8">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Google_Cloud_logo.svg/320px-Google_Cloud_logo.svg.png" alt="Google Cloud" class="h-8">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Heroku_logo.svg/320px-Heroku_logo.svg.png" alt="Heroku" class="h-8">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Mailchimp_Logo.png/320px-Mailchimp_Logo.png" alt="Mailchimp" class="h-8" loading="lazy">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/SendGrid_Logo_2016.svg/320px-SendGrid_Logo_2016.svg.png" alt="SendGrid" class="h-8" loading="lazy">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Amazon_Web_Services_Logo.svg/320px-Amazon_Web_Services_Logo.svg.png" alt="AWS" class="h-8" loading="lazy">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Google_Cloud_logo.svg/320px-Google_Cloud_logo.svg.png" alt="Google Cloud" class="h-8" loading="lazy">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Heroku_logo.svg/320px-Heroku_logo.svg.png" alt="Heroku" class="h-8" loading="lazy">
   </div>
 </div>
 
 <!-- Main content -->
 <main class="max-w-4xl mx-auto px-4 py-12">
 
-  <h2 class="text-4xl font-extrabold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600" data-aos="fade-down">📧 Email API Playground</h2>
+  <h2 class="text-4xl font-extrabold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 flex justify-center items-center gap-2" data-aos="fade-down">
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" focusable="false">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z"/>
+    </svg>
+    Email API Playground
+  </h2>
 
   <section class="glass" data-aos="fade-up">
-    <h3 class="text-2xl font-bold mb-4">Request Verification Code</h3>
+    <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" focusable="false">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"/>
+      </svg>
+      Request Verification Code
+    </h3>
     <form id="requestForm" class="space-y-4">
-      <input type="text" name="company" placeholder="Company" required class="w-full p-3 rounded border border-gray-300 outline-none">
-      <input type="text" name="username" placeholder="Username" required class="w-full p-3 rounded border border-gray-300 outline-none">
-      <input type="email" name="email" placeholder="Email" required class="w-full p-3 rounded border border-gray-300 outline-none">
+      <input type="text" name="company" placeholder="Company" required class="w-full p-3 rounded border border-gray-300 outline-none" />
+      <input type="text" name="username" placeholder="Username" required class="w-full p-3 rounded border border-gray-300 outline-none" />
+      <input type="email" name="email" placeholder="Email" required class="w-full p-3 rounded border border-gray-300 outline-none" />
       <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition">Send Code</button>
     </form>
-    <pre id="requestResult"></pre>
+    <pre id="requestResult" aria-live="polite" aria-atomic="true"></pre>
   </section>
 
   <section class="glass" data-aos="fade-up" data-aos-delay="100">
-    <h3 class="text-2xl font-bold mb-4">Verify Code</h3>
+    <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" focusable="false">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m2 8H7a2 2 0 01-2-2v-5a2 2 0 012-2h10a2 2 0 012 2v5a2 2 0 01-2 2z"/>
+      </svg>
+      Verify Code
+    </h3>
     <form id="verifyForm" class="space-y-4">
-      <input type="email" name="email" placeholder="Email" required class="w-full p-3 rounded border border-gray-300 outline-none">
-      <input type="text" name="code" placeholder="Code (e.g. 1A2B3C)" required class="w-full p-3 rounded border border-gray-300 outline-none">
+      <input type="email" name="email" placeholder="Email" required class="w-full p-3 rounded border border-gray-300 outline-none" />
+      <input type="text" name="code" placeholder="Code (e.g. 1A2B3C)" required class="w-full p-3 rounded border border-gray-300 outline-none" />
       <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 rounded hover:bg-green-700 transition">Verify</button>
     </form>
-    <pre id="verifyResult"></pre>
+    <pre id="verifyResult" aria-live="polite" aria-atomic="true"></pre>
   </section>
 
   <section class="glass" data-aos="fade-up" data-aos-delay="200">
-    <h3 class="text-2xl font-bold mb-4">Send Custom Email</h3>
+    <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" focusable="false">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16 12H8m8 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+      </svg>
+      Send Custom Email
+    </h3>
     <div class="space-y-4">
-      <input type="email" id="emailTo" placeholder="Recipient Email" required class="w-full p-3 rounded border border-gray-300 outline-none">
-      <input type="text" id="emailSubject" placeholder="Email Subject" class="w-full p-3 rounded border border-gray-300 outline-none">
-      <input type="text" id="companyName" placeholder="Company Name" required class="w-full p-3 rounded border border-gray-300 outline-none">
+      <input type="email" id="emailTo" placeholder="Recipient Email" required class="w-full p-3 rounded border border-gray-300 outline-none" />
+      <input type="text" id="emailSubject" placeholder="Email Subject" class="w-full p-3 rounded border border-gray-300 outline-none" />
+      <input type="text" id="companyName" placeholder="Company Name" required class="w-full p-3 rounded border border-gray-300 outline-none" />
       <textarea id="emailBody" placeholder="Main message (before link)" rows="4" class="w-full p-3 rounded border border-gray-300 outline-none"></textarea>
-      <input type="text" id="linkText" placeholder="CTA Link Text (e.g. Track Order)" class="w-full p-3 rounded border border-gray-300 outline-none">
-      <input type="url" id="linkUrl" placeholder="URL to link to (e.g. https://...)" class="w-full p-3 rounded border border-gray-300 outline-none">
+      <input type="text" id="linkText" placeholder="CTA Link Text (e.g. Track Order)" class="w-full p-3 rounded border border-gray-300 outline-none" />
+      <input type="url" id="linkUrl" placeholder="URL to link to (e.g. https://...)" class="w-full p-3 rounded border border-gray-300 outline-none" />
       <button id="sendEmailBtn" class="w-full bg-purple-600 text-white font-bold py-3 rounded hover:bg-purple-700 transition">Send Custom Email</button>
-      <p id="emailStatus" class="text-center text-sm mt-2"></p>
+      <p id="emailStatus" class="text-center text-sm mt-2" aria-live="polite" aria-atomic="true"></p>
     </div>
   </section>
 
   <section class="glass" data-aos="fade-up" data-aos-delay="300">
-    <h3 class="text-2xl font-bold mb-4">Email Server Health</h3>
-    <div id="healthStatus">Checking...</div>
+    <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" focusable="false">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/>
+      </svg>
+      Email Server Health
+    </h3>
+    <div id="healthStatus" aria-live="polite" aria-atomic="true">Checking...</div>
   </section>
 
   <section class="glass" data-aos="fade-up" data-aos-delay="400">
-    <h3 class="text-2xl font-bold mb-4">Live Execution Logs</h3>
-    <div id="liveLogs"></div>
+    <h3 class="text-2xl font-bold mb-4 flex justify-between items-center">
+      <span>Live Execution Logs</span>
+      <button id="backBtn" class="bg-gray-700 text-white text-sm px-3 py-1 rounded hover:bg-gray-600 transition" aria-label="Back to Home">Back to Home</button>
+    </h3>
+    <div id="liveLogs" role="log" aria-live="polite" aria-atomic="false"></div>
   </section>
 
 </main>
@@ -141,124 +181,7 @@
 </footer>
 
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-<script>
-  AOS.init();
-
-  const API_BASE = 'https://rocketverify.onrender.com';
-  const liveLogs = document.getElementById('liveLogs');
-
-  function addLog(message) {
-    const time = new Date().toLocaleTimeString();
-    liveLogs.innerHTML += `[${time}] ${message}<br>`;
-    liveLogs.scrollTop = liveLogs.scrollHeight;
-  }
-
-  document.getElementById('menuBtn').addEventListener('click', () => {
-    const menu = document.getElementById('mobileMenu');
-    menu.classList.toggle('hidden');
-  });
-
-  document.getElementById('requestForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const payload = {
-      company: form.company.value,
-      username: form.username.value,
-      email: form.email.value
-    };
-    addLog('Sending request for verification code...');
-    const res = await fetch(`${API_BASE}/request-code`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    document.getElementById('requestResult').textContent = JSON.stringify(data, null, 2);
-    addLog('Received verification code response.');
-  });
-
-  document.getElementById('verifyForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const payload = {
-      email: form.email.value,
-      code: form.code.value
-    };
-    addLog('Verifying code...');
-    const res = await fetch(`${API_BASE}/verify-code`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    document.getElementById('verifyResult').textContent = JSON.stringify(data, null, 2);
-    addLog('Code verification completed.');
-  });
-
-  document.getElementById('sendEmailBtn').addEventListener('click', async (e) => {
-    e.preventDefault();
-    const to = document.getElementById('emailTo').value.trim();
-    const subject = document.getElementById('emailSubject').value.trim() || "Notification";
-    const company_name = document.getElementById('companyName').value.trim();
-    const bodyText = document.getElementById('emailBody').value.trim();
-    const linkText = document.getElementById('linkText').value.trim();
-    const linkUrl = document.getElementById('linkUrl').value.trim();
-    const status = document.getElementById('emailStatus');
-
-    if (!to || !company_name || !bodyText) {
-      status.textContent = '❌ Please fill all required fields.';
-      status.style.color = 'red';
-      return;
-    }
-
-    let finalBody = `<p>${bodyText}</p>`;
-    if (linkText && linkUrl) {
-      finalBody += `<p><a href="${linkUrl}" style="color:#2979ff;text-decoration:underline;font-weight:bold;">${linkText}</a></p>`;
-    }
-
-    const payload = { to, subject, company_name, body: finalBody };
-    status.textContent = '⏳ Sending email...';
-    status.style.color = 'orange';
-    addLog('Sending custom email...');
-
-    try {
-      const res = await fetch(`${API_BASE}/api/send-notification`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const result = await res.json();
-      if (res.ok) {
-        status.textContent = '✅ Email sent successfully!';
-        status.style.color = 'green';
-        addLog('Custom email sent successfully.');
-      } else {
-        status.textContent = `❌ ${result.message || 'Failed to send email.'}`;
-        status.style.color = 'red';
-        addLog('Failed to send custom email.');
-      }
-    } catch (error) {
-      status.textContent = '❌ Network error. Please try again.';
-      status.style.color = 'red';
-      addLog('Network error while sending custom email.');
-    }
-  });
-
-  async function checkHealth() {
-    try {
-      const res = await fetch(`${API_BASE}/health`);
-      document.getElementById('healthStatus').innerHTML = res.ok
-        ? '<span class="text-green-600 font-bold">✅ Server is Online</span>'
-        : '<span class="text-red-600 font-bold">❌ Server Health Check Failed</span>';
-      addLog('Checked server health.');
-    } catch (err) {
-      document.getElementById('healthStatus').innerHTML = '<span class="text-red-600 font-bold">❌ Server Offline</span>';
-      addLog('Server health check failed.');
-    }
-  }
-
-  checkHealth();
-</script>
+<script src="app.js"></script>
 
 </body>
 </html>
