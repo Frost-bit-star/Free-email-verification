@@ -129,16 +129,16 @@ document.getElementById('sendEmailBtn').addEventListener('click', async (e) => {
     return;
   }
 
-  const emailHtml = `
-    <p>${bodyText}</p>
-    ${linkText && linkUrl ? `<p><a href="${linkUrl}" style="color:#4F46E5; font-weight:bold; text-decoration:none;">${linkText}</a></p>` : ''}
-    <p><small>— ${company_name}</small></p>
+  const emailBody = `
+    ${bodyText}
+    ${linkText && linkUrl ? `\n${linkText}: ${linkUrl}` : ''}
+    \n— ${company_name}
   `;
 
   addLog(`Sending email to ${to}...`);
 
   try {
-    const res = await fetch(`${API_BASE}/send-email`, {
+    const res = await fetch(`${API_BASE}/api/send-notification`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -148,7 +148,7 @@ document.getElementById('sendEmailBtn').addEventListener('click', async (e) => {
         to,
         subject,
         company_name,
-        html: emailHtml
+        body: emailBody
       })
     });
 

@@ -35,25 +35,20 @@ Here are the steps for getting started with Stack Verify:
 Here’s a simple example of how to use our API for email verification:
 
 ```javascript
-const axios = require('axios');
-
-async function verifyEmail(email) {
-    const response = await axios.get(`https://api.stackverify.com/verify?email=${email}`);
-    return response.data;
-}
-
-verifyEmail('example@example.com').then(data => console.log(data));
+curl -X POST https://rocketverify.onrender.com/api/send-notification \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: YOUR-APIKEY-HERE" \
+  -d '{
+    "to": "client@example.com",
+    "subject": "Notice",
+    "company_name": "StackVerify",
+    "body": "You have received a message from StackVerify."
+  }'
 ```
 
 **Output Example**:
 ```json
-{
-    "email": "example@example.com",
-    "status": "valid",
-    "details": {
-        "domain": "example.com"
-    }
-}
+{"message":"Notification email sent","to":"client@example.com","info":"250 2.0.0 OK  1751981584 41be
 ```
 
 ---
