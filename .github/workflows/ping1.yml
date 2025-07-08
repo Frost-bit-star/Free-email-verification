@@ -15,7 +15,7 @@ jobs:
 
           RETRIES=3
           DELAY=5
-          URL="https://rockets-nfcf.onrender.com/health"
+          URL="https://rocketverify.onrender.com/health"
 
           for i in $(seq 1 $RETRIES); do
             STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
