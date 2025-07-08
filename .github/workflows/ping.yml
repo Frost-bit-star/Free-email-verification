@@ -1,4 +1,4 @@
-name: Ping Load Balancer
+name: Ping Necromencer Bot Until Live
 
 on:
   schedule:
@@ -9,26 +9,21 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Curl Ping to Load Balancer with Retry
+      - name: Curl Ping to Necromencer Bot Until Live
         run: |
-          echo "🔄 Pinging rockets-nfcf load balancer with retry logic..."
+          echo "🔄 Starting infinite ping to Necromencer Autoview Bot until it comes live..."
 
-          RETRIES=3
-          DELAY=5
-          URL="https://rocketwhatsapp.onrender.com/"
+          URL="https://necromencer-bot.onrender.com/"
+          DELAY=10  # seconds
 
-          for i in $(seq 1 $RETRIES); do
-            STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
-            STATUS_CODE=$(echo "$STATUS_CODE" | tr -d '[:space:]')
+          while true; do
+            RESPONSE=$(curl -s "$URL")
 
-            if [ "$STATUS_CODE" -eq 200 ]; then
-              echo "✅ Load balancer is healthy (HTTP $STATUS_CODE)"
-              exit 0
+            if echo "$RESPONSE" | grep -q "Autoview Bot is running!"; then
+              echo "✅ Necromencer Autoview Bot is LIVE. Response OK."
+              break
             else
-              echo "❌ Attempt $i failed with HTTP $STATUS_CODE. Retrying in ${DELAY}s..."
+              echo "❌ Bot is not live yet. Waiting ${DELAY}s before next attempt..."
               sleep $DELAY
             fi
           done
-
-          echo "::error::🚨 Load balancer failed after $RETRIES attempts. Last status: $STATUS_CODE"
-          exit 1

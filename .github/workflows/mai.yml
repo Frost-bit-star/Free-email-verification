@@ -1,4 +1,4 @@
-name: Ping Load Balancer
+name: Ping Rocket WhatsApp
 
 on:
   schedule:
@@ -9,20 +9,20 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Curl Ping to Load Balancer with Retry
+      - name: Curl Ping to Rocket WhatsApp with Retry
         run: |
-          echo "🔄 Pinging rockets-nfcf load balancer with retry logic..."
+          echo "🔄 Pinging Rocket WhatsApp bot with retry logic..."
 
           RETRIES=3
           DELAY=5
-          URL="https://rockets-nfcf.onrender.com/health"
+          URL="https://rocketwhatsapp.onrender.com/"
 
           for i in $(seq 1 $RETRIES); do
             STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
             STATUS_CODE=$(echo "$STATUS_CODE" | tr -d '[:space:]')
 
             if [ "$STATUS_CODE" -eq 200 ]; then
-              echo "✅ Load balancer is healthy (HTTP $STATUS_CODE)"
+              echo "✅ Rocket WhatsApp bot is healthy (HTTP $STATUS_CODE)"
               exit 0
             else
               echo "❌ Attempt $i failed with HTTP $STATUS_CODE. Retrying in ${DELAY}s..."
@@ -30,5 +30,5 @@ jobs:
             fi
           done
 
-          echo "::error::🚨 Load balancer failed after $RETRIES attempts. Last status: $STATUS_CODE"
+          echo "::error::🚨 Rocket WhatsApp bot failed after $RETRIES attempts. Last status: $STATUS_CODE"
           exit 1
