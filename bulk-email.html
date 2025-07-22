@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bulk Emails - StackVerify</title>
+  <style>
+    :root {
+      --bg-color: #f6f8fb;
+      --text-color: #333;
+      --card-bg: rgba(255, 255, 255, 0.8);
+      --card-shadow: rgba(0, 0, 0, 0.1);
+      --button-bg: #4c8bf5;
+      --button-text: white;
+      --nav-icon-filter: none;
+    }
+
+    body.dark {
+      --bg-color: #121212;
+      --text-color: #f0f0f0;
+      --card-bg: rgba(18, 18, 18, 0.8);
+      --card-shadow: rgba(0, 0, 0, 0.6);
+      --button-bg: #6a5acd;
+      --button-text: white;
+      --nav-icon-filter: invert(1);
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .header {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      box-shadow: 0 2px 10px var(--card-shadow);
+    }
+
+    .header .logo-section {
+      display: flex;
+      align-items: center;
+    }
+
+    .header img.logo {
+      width: 35px;
+      height: 35px;
+      margin-right: 10px;
+    }
+
+    .header .app-name {
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+
+    .header .right-section {
+      display: flex;
+      align-items: center;
+    }
+
+    .header img.profile {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      margin-left: 10px;
+    }
+
+    .theme-toggle {
+      background: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 15px 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .content h3 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .content input, .content textarea {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+
+    .send-btn {
+      width: 100%;
+      background: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      border-radius: 10px;
+      padding: 16px;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .status {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 0.9em;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      border-top: 1px solid #ddd;
+      box-shadow: 0 -2px 10px var(--card-shadow);
+    }
+
+    .bottom-nav button {
+      background: none;
+      border: none;
+      font-size: 0.8em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--text-color);
+      cursor: pointer;
+    }
+
+    .bottom-nav button img {
+      width: 25px;
+      height: 25px;
+      margin-bottom: 3px;
+      filter: var(--nav-icon-filter);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-section">
+      <img src="https://img.icons8.com/fluency/48/000000/s.png" class="logo"/>
+      <span class="app-name">StackVerify</span>
+    </div>
+    <div class="right-section">
+      <button class="theme-toggle" onclick="toggleTheme()">Theme</button>
+      <img src="https://img.icons8.com/color/48/000000/user-male-circle--v1.png" class="profile"/>
+    </div>
+  </div>
+
+  <div class="content">
+    <h3>Send Bulk Email</h3>
+    <input type="text" id="companyName" placeholder="Company Name (required)">
+    <input type="text" id="subject" placeholder="Email Subject (optional)">
+    <textarea id="body" placeholder="Type your email message here"></textarea>
+    <input type="text" id="linkText" placeholder="Link Text (optional)">
+    <input type="url" id="linkUrl" placeholder="Link URL (optional)">
+    <button class="send-btn" onclick="sendBulkEmail()">Send to All Contacts</button>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="bottom-nav">
+  <button onclick="navigate('dashboard.html')">
+    <img src="https://img.icons8.com/ios-filled/50/000000/home.png"/>
+    Home
+  </button>
+  <button onclick="navigate('analytics.html')">
+    <img src="https://img.icons8.com/ios-filled/50/000000/graph.png"/>
+    Analytics
+  </button>
+  <button onclick="navigate('#')">
+    <img src="https://img.icons8.com/ios-filled/50/000000/settings.png"/>
+    Settings
+  </button>
+</div>
+  <script src="cordova.js"></script>
+  <script src="sqlitePlugin.js"></script>
+  <script>
+    const API_BASE = 'https://rocketverify.onrender.com';
+    const API_KEY = 'b46f39693914cc0dc6a2b9af7971e1bf';
+
+    let db;
+    let emailDb;
+
+    document.addEventListener('deviceready', onDeviceReady, false);
+
+    function onDeviceReady() {
+      db = window.sqlitePlugin.openDatabase({ name: 'app.db', location: 'default' });
+
+      emailDb = window.sqlitePlugin.openDatabase({ name: 'emails.db', location: 'default' });
+      emailDb.transaction(tx => {
+        tx.executeSql(`CREATE TABLE IF NOT EXISTS sends (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          subject TEXT,
+          message TEXT,
+          recipients INTEGER,
+          sent_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )`);
+      }, err => {
+        console.error('Emails DB init error', err);
+      }, () => {
+        console.log('Emails DB initialized');
+      });
+    }
+
+    function sendBulkEmail() {
+      const company = document.getElementById('companyName').value.trim();
+      const subject = document.getElementById('subject').value.trim() || 'Notification';
+      const bodyText = document.getElementById('body').value.trim();
+      const linkText = document.getElementById('linkText').value.trim();
+      const linkUrl = document.getElementById('linkUrl').value.trim();
+      const statusDiv = document.getElementById('status');
+
+      if (!company || !bodyText) {
+        statusDiv.style.color = 'red';
+        statusDiv.innerText = 'Company Name and Message body are required.';
+        return;
+      }
+
+      db.transaction(tx => {
+        tx.executeSql('SELECT email FROM contacts WHERE email IS NOT NULL', [], async (tx, results) => {
+          if (results.rows.length === 0) {
+            statusDiv.style.color = 'red';
+            statusDiv.innerText = 'No contacts with email found.';
+            return;
+          }
+
+          let successCount = 0;
+          let failCount = 0;
+
+          for (let i = 0; i < results.rows.length; i++) {
+            const email = results.rows.item(i).email;
+            const emailBody = `${bodyText}\n${linkText && linkUrl ? `${linkText}: ${linkUrl}` : ''}\n— ${company}`;
+
+            try {
+              const res = await fetch(`${API_BASE}/api/send-notification`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'x-api-key': API_KEY
+                },
+                body: JSON.stringify({
+                  to: email,
+                  subject: subject,
+                  company_name: company,
+                  body: emailBody
+                })
+              });
+              if (res.ok) successCount++; else failCount++;
+            } catch (err) {
+              console.error(err);
+              failCount++;
+            }
+          }
+
+          statusDiv.style.color = 'green';
+          statusDiv.innerText = `✅ Sent: ${successCount}, Failed: ${failCount}`;
+          logEmailSend(subject, bodyText, successCount);
+        }, (tx, err) => {
+          console.error('Query error', err);
+          statusDiv.style.color = 'red';
+          statusDiv.innerText = '❌ Failed to fetch contacts.';
+        });
+      });
+    }
+
+    function logEmailSend(subject, message, recipients) {
+      emailDb.transaction(tx => {
+        tx.executeSql(`INSERT INTO sends (subject, message, recipients) VALUES (?, ?, ?)`,
+          [subject, message, recipients],
+          () => console.log('Email send logged'),
+          (tx, err) => console.error('Insert error', err));
+      });
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+    }
+    function navigate(page) {
+  window.location = page;
+}
+  </script>
+</body>
+</html>
